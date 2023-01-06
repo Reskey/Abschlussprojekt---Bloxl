@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static UnityEngine.InputSystem.InputAction;
+using UnityEngine;
 
 namespace Assets.Skripts
 {
@@ -17,7 +18,7 @@ namespace Assets.Skripts
 
             facingRight = direction > 0;
 
-            currentSpeed = direction / 10;
+            currentSpeed = (direction / 20) * Variable_Speed;
         }
 
         private void MoveEnd(CallbackContext context)
@@ -25,13 +26,24 @@ namespace Assets.Skripts
             animator.SetBool("IsRunning", false);
 
             currentSpeed = 0f;
+
+            if (!isGrounded)
+            {
+                rigidBody.velocity /= 1.5f;
+
+                return;
+            }
+
+            rigidBody.velocity = Vector2.zero;
         }
 
         private void Jump(CallbackContext context)
         {
             if (isGrounded)
             {
-                rigidBody.AddForce(jumpForce);
+                animator.SetBool("IsJumping", true);
+
+                rigidBody.AddForce(jumpForce * Jump_Force);
             }
         }
 

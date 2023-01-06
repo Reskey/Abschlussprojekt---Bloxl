@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEngine.InputSystem.InputAction;
@@ -11,14 +12,17 @@ namespace Assets.Skripts
     public partial class PlayerController : MonoBehaviour
     {
         #region Attributes
+        [Header("Variable Forces"), SerializeField, Range(0, 1000)] private int Jump_Force = 0;
+        [SerializeField, Range(1000, 10000)] private int Variable_Speed = 1;
+
         private PlayerInput inputAction;
         private Animator animator;
         private Rigidbody2D rigidBody;
-        [SerializeField] private Transform groundCheck;
+
+        [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
 
         private Vector3 defaultVelocity = Vector3.zero;
-        private readonly Vector2 jumpForce = new Vector2(0, 350);
-        private readonly Vector2 dashForce = new Vector2(180, 0);
+        private Vector2 jumpForce = Vector2.up;
 
         private volatile float currentSpeed = 0f;
 
@@ -38,8 +42,6 @@ namespace Assets.Skripts
         }
 
         private bool isGrounded => Physics2D.OverlapCircleAll(groundCheck.position, 0.15f).Any(x => x.gameObject != this.gameObject);
-
-        private volatile bool dashCooldown = false;
         #endregion
 
         #region Monobehaviour Methods
@@ -65,26 +67,30 @@ namespace Assets.Skripts
             if (currentSpeed is not 0)
             {
                 UpdateMovementMetrics();
-
-                rigidBody.position = Vector3.MoveTowards(rigidBody.position, defaultVelocity, currentSpeed);
             }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.collider is TilemapCollider2D)
+            if (collision.collider is TilemapCollider2D or CompositeCollider2D)
             {
                 FastFallEnd(default);
+
+                animator.SetBool("IsJumping", false);
+
+                if (currentSpeed is 0)
+                {
+                    rigidBody.velocity = Vector2.zero;
+                }
             }
         }
         #endregion
 
         #region Internal Methods
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void UpdateMovementMetrics()
         {
-            Vector3 velocity = new Vector2(currentSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
-
-            rigidBody.velocity = Vector3.SmoothDamp(rigidBody.velocity, velocity, ref defaultVelocity, 0.5f);
+            rigidBody.velocity = new Vector2(currentSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
         }
 
         private void FlipSprite()
@@ -94,5 +100,5 @@ namespace Assets.Skripts
             transform.localScale = newScale;
         }
         #endregion
-    } 
+    }
 }
