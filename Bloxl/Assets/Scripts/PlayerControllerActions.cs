@@ -51,13 +51,13 @@ namespace Assets.Skripts
         {
             if (!isGrounded)
             {
-                rigidBody.gravityScale = 4;
+                rigidBody.gravityScale = 8;
             }
         }
 
         private void FastFallEnd(CallbackContext context)
         {
-            rigidBody.gravityScale = 1;
+            rigidBody.gravityScale = 4;
         }
     }
 }
