@@ -40,7 +40,7 @@ namespace Assets.Skripts
             }
         }
 
-        private bool isGrounded => Physics2D.OverlapCircleAll(groundCheck.position, 0.15f).Any(x => x.gameObject != this.gameObject);
+        private bool isGrounded => Physics2D.OverlapCircleAll(groundCheck.position, 0.25f).Any(x => x.gameObject != this.gameObject);
         #endregion
 
         #region Monobehaviour Methods
