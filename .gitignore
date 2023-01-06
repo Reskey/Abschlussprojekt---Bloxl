@@ -48,9 +48,10 @@ ExportedObj/
 *.VC.db
 
 #Ignore all .meta file
-*.meta
-#But not source file with postfix. which is everything but a folder
-# !*.*.meta
+# *.meta
+
+# Asset meta data should only be ignored when the corresponding asset is also ignored
+# !/[Aa]ssets/**/*.meta
 
 # Unity3D generated meta files
 *.pidb.meta
