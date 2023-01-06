@@ -1,46 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
+using static UnityEngine.InputSystem.InputAction;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool GameIsPaused = false;
+    [SerializeField] private GameObject pauseMenu;
 
-    public GameObject pauseMenu;
+    private Inputs inputController;
 
-    // Update is called once per frame
-    void Update()
+    private bool isPaused = false;
+
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        inputController = FindObjectOfType<GameController>().inputControlls;
+
+        inputController.PauseMenu.Enable();
+
+        inputController.PauseMenu.Pause.started += PauseAction;
+    }
+
+    private void PauseAction(CallbackContext context)
+    {
+        isPaused = !isPaused;
+
+        pauseMenu.SetActive(isPaused);
+
+        if (isPaused)
         {
-            if (GameIsPaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
+            inputController.PlayerBasics.Disable();
+
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+
+            inputController.PlayerBasics.Enable();
         }
     }
 
-    public void Resume()
-    {
-        pauseMenu.SetActive(false);
-        Time.timeScale = 1f;
-        GameIsPaused = false;
-    }
+    public void Resume() => PauseAction(default);
 
-    void Pause()
-    {
-        pauseMenu.SetActive(true);
-        Time.timeScale = 0f;
-        GameIsPaused = true;    
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
+    public void QuitGame() => Application.Quit();
 
 }

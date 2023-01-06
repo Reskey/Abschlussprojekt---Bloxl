@@ -15,13 +15,12 @@ namespace Assets.Skripts
         [Header("Variable Forces"), SerializeField, Range(0, 1000)] private int Jump_Force = 0;
         [SerializeField, Range(1000, 10000)] private int Variable_Speed = 1;
 
-        private PlayerInput inputAction;
+        private Inputs inputAction;
         private Animator animator;
         private Rigidbody2D rigidBody;
 
         [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
 
-        private Vector3 defaultVelocity = Vector3.zero;
         private Vector2 jumpForce = Vector2.up;
 
         private volatile float currentSpeed = 0f;
@@ -47,19 +46,19 @@ namespace Assets.Skripts
         #region Monobehaviour Methods
         void Awake()
         {
-            inputAction = new PlayerInput();
+            inputAction = FindObjectOfType<GameController>().inputControlls;
             animator = GetComponent<Animator>();
             rigidBody = GetComponent<Rigidbody2D>();
 
-            inputAction.Enable();
+            inputAction.PlayerBasics.Enable();
+            
+            inputAction.PlayerBasics.Run.performed += MovePerform;
+            inputAction.PlayerBasics.Run.canceled += MoveEnd;
 
-            inputAction.PlayerBasic.Run.performed += MovePerform;
-            inputAction.PlayerBasic.Run.canceled += MoveEnd;
+            inputAction.PlayerBasics.Jump.performed += Jump;
 
-            inputAction.PlayerBasic.Jump.performed += Jump;
-
-            inputAction.PlayerBasic.Fastfall.started += FastFallStart;
-            inputAction.PlayerBasic.Fastfall.canceled += FastFallEnd;
+            inputAction.PlayerBasics.Fastfall.started += FastFallStart;
+            inputAction.PlayerBasics.Fastfall.canceled += FastFallEnd;
         }
 
         void FixedUpdate()
