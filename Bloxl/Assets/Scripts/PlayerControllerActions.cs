@@ -12,6 +12,8 @@ namespace Assets.Skripts
     {
         private void MovePerform(CallbackContext context)
         {
+            //rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+
             animator.SetBool("IsRunning", true);
 
             float direction = context.ReadValue<float>();
@@ -34,6 +36,8 @@ namespace Assets.Skripts
                 return;
             }
 
+            //rigidBody.constraints |= RigidbodyConstraints2D.FreezePositionX;
+
             rigidBody.velocity = Vector2.zero;
         }
 
@@ -51,13 +55,13 @@ namespace Assets.Skripts
         {
             if (!isGrounded)
             {
-                rigidBody.gravityScale = 8;
+                rigidBody.gravityScale = 10;
             }
         }
 
         private void FastFallEnd(CallbackContext context)
         {
-            rigidBody.gravityScale = 4;
+            rigidBody.gravityScale = 6;
         }
     }
 }

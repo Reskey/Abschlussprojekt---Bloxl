@@ -20,6 +20,8 @@ namespace Assets.Skripts
         private Rigidbody2D rigidBody;
 
         [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
+        [SerializeField] private CapsuleCollider2D capsuleCollider2D;
+        [SerializeField, Range(0f, 5f)] private float groundCheckHeight = 0.2f;
 
         private Vector2 jumpForce = Vector2.up;
 
@@ -40,7 +42,16 @@ namespace Assets.Skripts
             }
         }
 
-        private bool isGrounded => Physics2D.OverlapCircleAll(groundCheck.position, 0.25f).Any(x => x.gameObject != this.gameObject);
+        //private bool isGrounded => Physics2D.OverlapBoxAll(groundCheck.position, new Vector3(capsuleCollider2D.bounds.extents.x, 2f, 0f), 0f).Any(x => x.gameObject != this.gameObject);
+
+        private bool isGrounded
+        {
+            get
+            {
+                return Physics2D.OverlapBoxAll(capsuleCollider2D.bounds.center + new Vector3(0f, capsuleCollider2D.size.y), new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.bounds.extents.y + groundCheckHeight * 2.5f, 0f), 0f).Any(x => x.gameObject != this.gameObject);
+            }
+        }
+
         #endregion
 
         #region Monobehaviour Methods    
@@ -71,6 +82,15 @@ namespace Assets.Skripts
             {
                 UpdateMovementMetrics();
             }
+            Color rayColor = Color.red;
+            if (isGrounded)
+            {
+                rayColor = Color.green;
+            }
+            Debug.DrawRay(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y), Vector2.down * (-capsuleCollider2D.size.y * 3 + groundCheckHeight * 2.5f), rayColor);
+            Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y), Vector2.down * (-capsuleCollider2D.size.y * 3 + groundCheckHeight * 2.5f), rayColor);
+            Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y * 2 + groundCheckHeight * 2.5f), Vector2.right * (capsuleCollider2D.bounds.extents.y + 0.5f), rayColor);
+ 
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -84,7 +104,8 @@ namespace Assets.Skripts
                 if (currentSpeed is 0)
                 {
                     rigidBody.velocity = Vector2.zero;
-                }
+                } 
+                
             }
         }
         #endregion

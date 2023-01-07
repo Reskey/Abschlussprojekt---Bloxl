@@ -119,7 +119,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 2061978440567451377}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 8ff10159b08fcaa4691ed4d0ccd9a5fb, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -158,9 +158,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a9b6265372c4144a84aa5ecd32c3a16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Jump_Force: 314
-  Variable_Speed: 8513
+  Jump_Force: 1000
+  Variable_Speed: 9000
   groundCheck: {fileID: 2061978442150269981}
+  capsuleCollider2D: {fileID: 0}
+  groundCheckHeight: 0.2
 --- !u!1 &2061978442150269980
 GameObject:
   m_ObjectHideFlags: 0
