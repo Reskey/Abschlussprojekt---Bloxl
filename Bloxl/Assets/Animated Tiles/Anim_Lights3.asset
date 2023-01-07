@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Anim_Lights3
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
-  - {fileID: -1300702955, guid: 6f611b291545f704ab3e56b72dc9c23d, type: 3}
-  - {fileID: 744473486, guid: 6f611b291545f704ab3e56b72dc9c23d, type: 3}
-  - {fileID: 1816042595, guid: 6f611b291545f704ab3e56b72dc9c23d, type: 3}
-  - {fileID: 59396606, guid: 6f611b291545f704ab3e56b72dc9c23d, type: 3}
-  - {fileID: -1395818879, guid: 6f611b291545f704ab3e56b72dc9c23d, type: 3}
+  - {fileID: 368290030, guid: 6f611b291545f704ab3e56b72dc9c23d, type: 3}
+  - {fileID: -1826317208, guid: 6f611b291545f704ab3e56b72dc9c23d, type: 3}
+  - {fileID: 385974022, guid: 6f611b291545f704ab3e56b72dc9c23d, type: 3}
+  - {fileID: -1085929239, guid: 6f611b291545f704ab3e56b72dc9c23d, type: 3}
+  - {fileID: 1644619193, guid: 6f611b291545f704ab3e56b72dc9c23d, type: 3}
   m_MinSpeed: 5
   m_MaxSpeed: 5
   m_AnimationStartTime: 0
