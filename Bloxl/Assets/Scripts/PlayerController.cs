@@ -43,15 +43,19 @@ namespace Assets.Skripts
         private bool isGrounded => Physics2D.OverlapCircleAll(groundCheck.position, 0.25f).Any(x => x.gameObject != this.gameObject);
         #endregion
 
-        #region Monobehaviour Methods
+        #region Monobehaviour Methods    
         void Awake()
         {
-            inputAction = FindObjectOfType<GameController>().inputControlls;
             animator = GetComponent<Animator>();
-            rigidBody = GetComponent<Rigidbody2D>();
+            rigidBody = GetComponent<Rigidbody2D>();           
+        }
+
+        void Start()
+        {
+            inputAction = FindObjectOfType<GameController>().inputControlls;
 
             inputAction.PlayerBasics.Enable();
-            
+
             inputAction.PlayerBasics.Run.performed += MovePerform;
             inputAction.PlayerBasics.Run.canceled += MoveEnd;
 

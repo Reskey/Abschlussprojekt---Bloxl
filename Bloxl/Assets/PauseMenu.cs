@@ -13,7 +13,7 @@ public class PauseMenu : MonoBehaviour
 
     private bool isPaused = false;
 
-    private void Awake()
+    private void Start()
     {
         inputController = FindObjectOfType<GameController>().inputControlls;
 
