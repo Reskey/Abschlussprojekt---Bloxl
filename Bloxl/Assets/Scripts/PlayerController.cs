@@ -22,6 +22,20 @@ namespace Assets.Skripts
         [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
         [SerializeField] private CapsuleCollider2D capsuleCollider2D;
         [SerializeField, Range(0f, 5f)] private float groundCheckHeight = 0.2f;
+        [SerializeField] private LayerMask layerMask;
+
+        [Space(10), Header("Slope Check"), SerializeField, Range(0, 10)] private float slopeCheckDistance;
+        [SerializeField] private PhysicsMaterial2D notSlipperyMaterial;
+        [SerializeField] private PhysicsMaterial2D slipperyMaterial;
+
+        private float slopeDownAngle;
+        private float slopeDownAngleOld;
+        private Vector2 slopeNormalPerp;
+        private bool isOnSlope;
+
+        [Space(10), Header("Debug Options"), SerializeField] private bool slopeCheckVisuals = true;
+        [SerializeField] private bool groundCheckVisuals = true;
+
 
         private Vector2 jumpForce = Vector2.up;
 
@@ -81,16 +95,26 @@ namespace Assets.Skripts
             if (currentSpeed is not 0)
             {
                 UpdateMovementMetrics();
-            }
+            } 
+
+            SlopeCheck();
+
             Color rayColor = Color.red;
             if (isGrounded)
             {
+                capsuleCollider2D.sharedMaterial = notSlipperyMaterial;
                 rayColor = Color.green;
             }
-            Debug.DrawRay(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y), Vector2.down * (-capsuleCollider2D.size.y * 3 + groundCheckHeight * 2.5f), rayColor);
-            Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y), Vector2.down * (-capsuleCollider2D.size.y * 3 + groundCheckHeight * 2.5f), rayColor);
-            Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y * 2 + groundCheckHeight * 2.5f), Vector2.right * (capsuleCollider2D.bounds.extents.y + 0.5f), rayColor);
- 
+            else
+            {
+                capsuleCollider2D.sharedMaterial = slipperyMaterial;
+            }
+            if (groundCheckVisuals)
+            {
+                Debug.DrawRay(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y), Vector2.down * (-capsuleCollider2D.size.y * 3 + groundCheckHeight * 2.5f), rayColor);
+                Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y), Vector2.down * (-capsuleCollider2D.size.y * 3 + groundCheckHeight * 2.5f), rayColor);
+                Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y * 2 + groundCheckHeight * 2.5f), Vector2.right * (capsuleCollider2D.bounds.extents.y + 0.5f), rayColor);
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -114,7 +138,22 @@ namespace Assets.Skripts
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void UpdateMovementMetrics()
         {
+ 
             rigidBody.velocity = new Vector2(currentSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
+            
+
+            if (isGrounded && !isOnSlope)
+            {
+                rigidBody.velocity = new Vector2(currentSpeed * Time.fixedDeltaTime, 0.0f);
+            } 
+            else if (isGrounded && isOnSlope)
+            {
+                rigidBody.velocity = new Vector2(currentSpeed * slopeNormalPerp.x * -Time.fixedDeltaTime, currentSpeed * slopeNormalPerp.y * -Time.fixedDeltaTime);
+            } 
+            else if (!isGrounded)
+            {
+                rigidBody.velocity = new Vector2(currentSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
+            }
         }
 
         private void FlipSprite()
@@ -122,6 +161,61 @@ namespace Assets.Skripts
             Vector3 newScale = transform.localScale;
             newScale.x *= -1;
             transform.localScale = newScale;
+        }
+
+        private void SlopeCheck()
+        {
+            Vector2 checkPos = transform.position - new Vector3(0f, capsuleCollider2D.size.y / 2);
+
+            SlopeCheckVertical(checkPos);
+        }
+
+        private void SlopeCheckVertical(Vector2 checkPos)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(checkPos, Vector2.down, slopeCheckDistance, layerMask);
+
+            if (hit)
+            {
+                slopeNormalPerp = Vector2.Perpendicular(hit.normal).normalized;
+
+                slopeDownAngle = Vector2.Angle(hit.normal, Vector2.up); 
+                
+                if (slopeDownAngle != slopeDownAngleOld)
+                {
+                    isOnSlope = true;
+                }
+
+                slopeDownAngleOld = slopeDownAngle; 
+
+                if (slopeCheckVisuals)
+                {
+                    Debug.DrawRay(hit.point, slopeNormalPerp, Color.magenta);
+                    Debug.DrawRay(hit.point, hit.normal, Color.green);
+                }
+            }
+
+        }
+
+        private void SlopeCheckHorizontal(Vector2 checkPos)
+        {
+            RaycastHit2D slopeHitFront = Physics2D.Raycast(checkPos, transform.right, slopeCheckDistance, layerMask);
+            RaycastHit2D slopeHitBack = Physics2D.Raycast(checkPos, -transform.right, slopeCheckDistance, layerMask);
+
+            if (slopeHitFront)
+            {
+                isOnSlope = true;
+
+            }
+            else if (slopeHitBack)
+            {
+                isOnSlope = true;
+
+            }
+            else
+            {
+                isOnSlope = false;
+            }
+
         }
         #endregion
     }
