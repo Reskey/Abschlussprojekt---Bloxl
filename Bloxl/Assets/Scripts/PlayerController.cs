@@ -62,7 +62,7 @@ namespace Assets.Skripts
         {
             get
             {
-                return Physics2D.OverlapBoxAll(capsuleCollider2D.bounds.center + new Vector3(0f, capsuleCollider2D.size.y), new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.bounds.extents.y + groundCheckHeight * 2.5f, 0f), 0f).Any(x => x.gameObject != this.gameObject);
+                return Physics2D.OverlapBoxAll(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.size.x / 2.4f, -capsuleCollider2D.size.y, 0f), new Vector2(capsuleCollider2D.size.x , groundCheckHeight), 0f).Any(x => x.gameObject != this.gameObject);
             }
         }
 
@@ -108,12 +108,17 @@ namespace Assets.Skripts
             else
             {
                 capsuleCollider2D.sharedMaterial = slipperyMaterial;
+
+                if (rigidBody.position.y < -50f)
+                {
+                    rigidBody.position = new Vector2(-4f, 0f);
+                }
             }
             if (groundCheckVisuals)
             {
-                Debug.DrawRay(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y), Vector2.down * (-capsuleCollider2D.size.y * 3 + groundCheckHeight * 2.5f), rayColor);
-                Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y), Vector2.down * (-capsuleCollider2D.size.y * 3 + groundCheckHeight * 2.5f), rayColor);
-                Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y * 2 + groundCheckHeight * 2.5f), Vector2.right * (capsuleCollider2D.bounds.extents.y + 0.5f), rayColor);
+                Debug.DrawRay(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight), rayColor);
+                Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight), rayColor);
+                Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y + groundCheckHeight), Vector2.right * (capsuleCollider2D.size.x * 2), rayColor);
             }
         }
 
