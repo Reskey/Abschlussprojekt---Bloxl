@@ -13,14 +13,14 @@ namespace Assets.Skripts
     {
         #region Attributes
         [Header("Variable Forces"), SerializeField, Range(0, 1000)] private int Jump_Force = 0;
-        [SerializeField, Range(1000, 10000)] private int Variable_Speed = 1;
+        [SerializeField, Range(0, 1000)] private int Variable_Speed = 1;
 
         private Inputs inputAction;
         private Animator animator;
         private Rigidbody2D rigidBody;
 
         [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
-        [SerializeField] private CapsuleCollider2D capsuleCollider2D;
+        [SerializeField] private BoxCollider2D capsuleCollider2D;
         [SerializeField, Range(0f, 5f)] private float groundCheckHeight = 0.2f;
         [SerializeField] private LayerMask layerMask;
 
@@ -56,15 +56,7 @@ namespace Assets.Skripts
             }
         }
 
-        //private bool isGrounded => Physics2D.OverlapBoxAll(groundCheck.position, new Vector3(capsuleCollider2D.bounds.extents.x, 2f, 0f), 0f).Any(x => x.gameObject != this.gameObject);
-
-        private bool isGrounded
-        {
-            get
-            {
-                return Physics2D.OverlapBoxAll(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.size.x / 2.4f, -capsuleCollider2D.size.y, 0f), new Vector2(capsuleCollider2D.size.x , groundCheckHeight), 0f).Any(x => x.gameObject != this.gameObject);
-            }
-        }
+        private bool isGrounded => Physics2D.OverlapBoxAll(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.size.x / 2.4f, -capsuleCollider2D.size.y, 0f), new Vector2(capsuleCollider2D.size.x , groundCheckHeight), 0f).Any(x => x.gameObject != this.gameObject);
 
         #endregion
 
@@ -95,7 +87,7 @@ namespace Assets.Skripts
             if (currentSpeed is not 0)
             {
                 UpdateMovementMetrics();
-            } 
+            }
 
             SlopeCheck();
 
@@ -140,25 +132,20 @@ namespace Assets.Skripts
         #endregion
 
         #region Internal Methods
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void UpdateMovementMetrics()
         {
- 
-            rigidBody.velocity = new Vector2(currentSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
-            
 
-            if (isGrounded && !isOnSlope)
-            {
-                rigidBody.velocity = new Vector2(currentSpeed * Time.fixedDeltaTime, 0.0f);
-            } 
-            else if (isGrounded && isOnSlope)
+            rigidBody.velocity = new Vector2(currentSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
+
+            if (isGrounded && isOnSlope)
             {
                 rigidBody.velocity = new Vector2(currentSpeed * slopeNormalPerp.x * -Time.fixedDeltaTime, currentSpeed * slopeNormalPerp.y * -Time.fixedDeltaTime);
-            } 
+            }
             else if (!isGrounded)
             {
                 rigidBody.velocity = new Vector2(currentSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
             }
+
         }
 
         private void FlipSprite()
@@ -183,42 +170,13 @@ namespace Assets.Skripts
             {
                 slopeNormalPerp = Vector2.Perpendicular(hit.normal).normalized;
 
-                slopeDownAngle = Vector2.Angle(hit.normal, Vector2.up); 
-                
-                if (slopeDownAngle != slopeDownAngleOld)
-                {
-                    isOnSlope = true;
-                }
-
-                slopeDownAngleOld = slopeDownAngle; 
+                slopeDownAngle = Vector2.Angle(hit.normal, Vector2.up);
 
                 if (slopeCheckVisuals)
                 {
                     Debug.DrawRay(hit.point, slopeNormalPerp, Color.magenta);
                     Debug.DrawRay(hit.point, hit.normal, Color.green);
                 }
-            }
-
-        }
-
-        private void SlopeCheckHorizontal(Vector2 checkPos)
-        {
-            RaycastHit2D slopeHitFront = Physics2D.Raycast(checkPos, transform.right, slopeCheckDistance, layerMask);
-            RaycastHit2D slopeHitBack = Physics2D.Raycast(checkPos, -transform.right, slopeCheckDistance, layerMask);
-
-            if (slopeHitFront)
-            {
-                isOnSlope = true;
-
-            }
-            else if (slopeHitBack)
-            {
-                isOnSlope = true;
-
-            }
-            else
-            {
-                isOnSlope = false;
             }
 
         }

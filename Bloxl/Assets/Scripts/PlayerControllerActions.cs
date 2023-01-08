@@ -20,7 +20,7 @@ namespace Assets.Skripts
 
             facingRight = direction > 0;
 
-            currentSpeed = (direction / 20) * Variable_Speed;
+            currentSpeed = (direction) * Variable_Speed;
         }
 
         private void MoveEnd(CallbackContext context)
