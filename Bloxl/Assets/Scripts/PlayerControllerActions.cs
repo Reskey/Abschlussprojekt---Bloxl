@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
+using System.Threading;
 
 namespace Assets.Skripts
 {
@@ -12,25 +14,25 @@ namespace Assets.Skripts
     {
         private void MovePerform(CallbackContext context)
         {
-            animator.SetBool("IsRunning", true);
-
+            animator.SetBool(RunningParameter, true);
+            
             float direction = context.ReadValue<float>();
 
             facingRight = direction > 0;
-
-            currentSpeed = (direction / 20) * Variable_Speed;
+            
+            Interlocked.Exchange(ref horizontalSpeed, direction * Variable_Speed);
         }
 
         private void MoveEnd(CallbackContext context)
         {
-            animator.SetBool("IsRunning", false);
+            animator.SetBool(RunningParameter, false);
 
-            currentSpeed = 0f;
+            Interlocked.Exchange(ref horizontalSpeed, 0f);
 
             if (!isGrounded)
             {
                 rigidBody.velocity /= 1.5f;
-
+                
                 return;
             }
 
@@ -41,9 +43,13 @@ namespace Assets.Skripts
         {
             if (isGrounded)
             {
-                animator.SetBool("IsJumping", true);
+                isGrounded = false;
+
+                animator.SetBool(JumpingParameter, true);
 
                 rigidBody.AddForce(jumpForce * Jump_Force);
+
+                slippery.friction = 0f;
             }
         }
 

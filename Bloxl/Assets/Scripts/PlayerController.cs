@@ -12,18 +12,20 @@ namespace Assets.Skripts
     public partial class PlayerController : MonoBehaviour
     {
         #region Attributes
+        internal const string RunningParameter = "IsRunning";
+        internal const string JumpingParameter = "IsJumping";
+
         [Header("Variable Forces"), SerializeField, Range(0, 1000)] private int Jump_Force = 0;
-        [SerializeField, Range(1000, 10000)] private int Variable_Speed = 1;
+        [SerializeField, Range(0, 1000)] private int Variable_Speed = 1;
 
         private Inputs inputAction;
         private Animator animator;
         private Rigidbody2D rigidBody;
-
-        [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
+        private PhysicsMaterial2D slippery;
 
         private Vector2 jumpForce = Vector2.up;
 
-        private volatile float currentSpeed = 0f;
+        private volatile float horizontalSpeed = 0f;
 
         private volatile bool _facingRight = true;
         private bool facingRight
@@ -35,26 +37,22 @@ namespace Assets.Skripts
                 {
                     FlipSprite();
                 }
-
+                
                 _facingRight = value;
             }
         }
 
-        private bool isGrounded => Physics2D.OverlapCircleAll(groundCheck.position, 0.25f).Any(x => x.gameObject != this.gameObject);
+        private volatile bool isGrounded = false;
         #endregion
 
         #region Monobehaviour Methods    
         void Awake()
         {
-            animator = GetComponent<Animator>();
-            rigidBody = GetComponent<Rigidbody2D>();           
-        }
-
-        void Start()
-        {
             inputAction = FindObjectOfType<GameController>().inputControlls;
 
-            inputAction.PlayerBasics.Enable();
+            animator = GetComponent<Animator>();
+            rigidBody = GetComponent<Rigidbody2D>();
+            slippery = rigidBody.sharedMaterial;
 
             inputAction.PlayerBasics.Run.performed += MovePerform;
             inputAction.PlayerBasics.Run.canceled += MoveEnd;
@@ -65,26 +63,30 @@ namespace Assets.Skripts
             inputAction.PlayerBasics.Fastfall.canceled += FastFallEnd;
         }
 
+        void Start()
+        {
+            inputAction.PlayerBasics.Enable();
+        }
+
         void FixedUpdate()
         {
-            if (currentSpeed is not 0)
+            if (horizontalSpeed is not 0)
             {
                 UpdateMovementMetrics();
             }
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.collider is TilemapCollider2D or CompositeCollider2D)
+            if (collision is TilemapCollider2D or CompositeCollider2D)
             {
                 FastFallEnd(default);
 
-                animator.SetBool("IsJumping", false);
+                animator.SetBool(JumpingParameter, false);
 
-                if (currentSpeed is 0)
-                {
-                    rigidBody.velocity = Vector2.zero;
-                }
+                slippery.friction = 1;
+
+                isGrounded = true;
             }
         }
         #endregion
@@ -93,9 +95,10 @@ namespace Assets.Skripts
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void UpdateMovementMetrics()
         {
-            rigidBody.velocity = new Vector2(currentSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(horizontalSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void FlipSprite()
         {
             Vector3 newScale = transform.localScale;
