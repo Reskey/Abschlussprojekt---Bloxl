@@ -19,8 +19,10 @@ namespace Assets.Skripts
             float direction = context.ReadValue<float>();
 
             facingRight = direction > 0;
-            
+
             Interlocked.Exchange(ref horizontalSpeed, direction * Variable_Speed);
+
+            rigidBody.constraints = move;
         }
 
         private void MoveEnd(CallbackContext context)
@@ -36,7 +38,7 @@ namespace Assets.Skripts
                 return;
             }
 
-            rigidBody.velocity = Vector2.zero;
+            rigidBody.constraints = dontMove;
         }
 
         private void Jump(CallbackContext context)
@@ -48,8 +50,6 @@ namespace Assets.Skripts
                 animator.SetBool(JumpingParameter, true);
 
                 rigidBody.AddForce(jumpForce * Jump_Force);
-
-                slippery.friction = 0f;
             }
         }
 

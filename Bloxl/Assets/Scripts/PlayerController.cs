@@ -14,6 +14,8 @@ namespace Assets.Skripts
         #region Attributes
         internal const string RunningParameter = "IsRunning";
         internal const string JumpingParameter = "IsJumping";
+        internal const RigidbodyConstraints2D dontMove = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        internal const RigidbodyConstraints2D move = RigidbodyConstraints2D.FreezeRotation;
 
         [Header("Variable Forces"), SerializeField, Range(0, 1000)] private int Jump_Force = 0;
         [SerializeField, Range(0, 1000)] private int Variable_Speed = 1;
@@ -21,7 +23,6 @@ namespace Assets.Skripts
         private Inputs inputAction;
         private Animator animator;
         private Rigidbody2D rigidBody;
-        private PhysicsMaterial2D slippery;
 
         private Vector2 jumpForce = Vector2.up;
 
@@ -52,7 +53,6 @@ namespace Assets.Skripts
 
             animator = GetComponent<Animator>();
             rigidBody = GetComponent<Rigidbody2D>();
-            slippery = rigidBody.sharedMaterial;
 
             inputAction.PlayerBasics.Run.performed += MovePerform;
             inputAction.PlayerBasics.Run.canceled += MoveEnd;
@@ -66,6 +66,11 @@ namespace Assets.Skripts
         void Start()
         {
             inputAction.PlayerBasics.Enable();
+
+            rigidBody.sharedMaterial = new PhysicsMaterial2D("Verbuggter kekw")
+            {
+                friction = 0
+            };
         }
 
         void FixedUpdate()
@@ -84,7 +89,10 @@ namespace Assets.Skripts
 
                 animator.SetBool(JumpingParameter, false);
 
-                slippery.friction = 1;
+                if (horizontalSpeed is 0)
+                {
+                    rigidBody.constraints = dontMove;
+                }
 
                 isGrounded = true;
             }
