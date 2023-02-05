@@ -33,6 +33,9 @@ namespace Assets.Skripts
         private Vector2 slopeNormalPerp;
         private bool isOnSlope;
 
+        [Space(10), Header("Sounds"), SerializeField] private AudioSource jumpSound;
+        [SerializeField] private AudioSource runSound;
+
         [Space(10), Header("Debug Options"), SerializeField] private bool slopeCheckVisuals = true;
         [SerializeField] private bool groundCheckVisuals = true;
 
@@ -56,7 +59,7 @@ namespace Assets.Skripts
             }
         }
 
-        private bool isGrounded => Physics2D.OverlapBoxAll(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.size.x / 2.4f, -capsuleCollider2D.size.y, 0f), new Vector2(capsuleCollider2D.size.x , groundCheckHeight), 0f).Any(x => x.gameObject != this.gameObject);
+        private bool isGrounded => Physics2D.OverlapBoxAll(capsuleCollider2D.bounds.center + new Vector3(0f, -capsuleCollider2D.size.y, 0f), new Vector2(capsuleCollider2D.bounds.size.x - 0.2f, groundCheckHeight), 0f).Any(x => x.gameObject != this.gameObject);
 
         #endregion
 
@@ -94,6 +97,7 @@ namespace Assets.Skripts
             Color rayColor = Color.red;
             if (isGrounded)
             {
+                animator.SetBool("IsJumping", false);
                 capsuleCollider2D.sharedMaterial = notSlipperyMaterial;
                 rayColor = Color.green;
             }

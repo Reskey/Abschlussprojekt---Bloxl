@@ -45,9 +45,11 @@ namespace Assets.Skripts
         {
             if (isGrounded)
             {
+                jumpSound.Play();
+
                 animator.SetBool("IsJumping", true);
 
-                rigidBody.AddForce(jumpForce * Jump_Force);
+                rigidBody.AddForce(jumpForce * Jump_Force, ForceMode2D.Impulse);
             }
         }
 
