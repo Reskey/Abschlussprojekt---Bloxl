@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Skull_Single_Left
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
-  - {fileID: 2020681042, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
-  - {fileID: -173820474, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
-  - {fileID: -163045074, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
-  - {fileID: -173820474, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
+  - {fileID: 1005952322, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
+  - {fileID: 1618554882, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
+  - {fileID: -392770216, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
+  - {fileID: 1618554882, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
   m_MinSpeed: 1
   m_MaxSpeed: 1
   m_AnimationStartTime: 0

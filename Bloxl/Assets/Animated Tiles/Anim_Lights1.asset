@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Anim_Lights1
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
-  - {fileID: 377915931, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
-  - {fileID: 1282502831, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
-  - {fileID: -364325801, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
-  - {fileID: -455589273, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
-  - {fileID: 1608247751, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
-  - {fileID: 1798107256, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
+  - {fileID: -1193887620, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
+  - {fileID: -1641893600, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
+  - {fileID: -1788515972, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
+  - {fileID: -1544739469, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
+  - {fileID: -437020264, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
+  - {fileID: -683934831, guid: e0a6a4dab9681df4991799dafea82e50, type: 3}
   m_MinSpeed: 2
   m_MaxSpeed: 2
   m_AnimationStartTime: 0

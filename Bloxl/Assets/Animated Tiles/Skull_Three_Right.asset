@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Skull_Three_Right
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
-  - {fileID: 607517122, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
-  - {fileID: 416491164, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
-  - {fileID: -248600779, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
-  - {fileID: 416491164, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
+  - {fileID: 175171407, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
+  - {fileID: -1522619039, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
+  - {fileID: -229911419, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
+  - {fileID: -1522619039, guid: e376b6b472cc6e14c88a0c27939fb0aa, type: 3}
   m_MinSpeed: 1
   m_MaxSpeed: 1
   m_AnimationStartTime: 0

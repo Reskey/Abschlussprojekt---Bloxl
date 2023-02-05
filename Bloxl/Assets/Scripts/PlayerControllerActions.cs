@@ -12,13 +12,15 @@ namespace Assets.Skripts
     {
         private void MovePerform(CallbackContext context)
         {
+            //rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+
             animator.SetBool("IsRunning", true);
 
             float direction = context.ReadValue<float>();
 
             facingRight = direction > 0;
 
-            currentSpeed = (direction / 20) * Variable_Speed;
+            currentSpeed = (direction) * Variable_Speed;
         }
 
         private void MoveEnd(CallbackContext context)
@@ -34,6 +36,8 @@ namespace Assets.Skripts
                 return;
             }
 
+            //rigidBody.constraints |= RigidbodyConstraints2D.FreezePositionX;
+
             rigidBody.velocity = Vector2.zero;
         }
 
@@ -41,9 +45,11 @@ namespace Assets.Skripts
         {
             if (isGrounded)
             {
+                jumpSound.Play();
+
                 animator.SetBool("IsJumping", true);
 
-                rigidBody.AddForce(jumpForce * Jump_Force);
+                rigidBody.AddForce(jumpForce * Jump_Force, ForceMode2D.Impulse);
             }
         }
 
@@ -51,13 +57,13 @@ namespace Assets.Skripts
         {
             if (!isGrounded)
             {
-                rigidBody.gravityScale = 8;
+                rigidBody.gravityScale = 10;
             }
         }
 
         private void FastFallEnd(CallbackContext context)
         {
-            rigidBody.gravityScale = 4;
+            rigidBody.gravityScale = 6;
         }
     }
 }
