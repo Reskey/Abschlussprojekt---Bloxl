@@ -36,7 +36,7 @@ namespace Assets.Skripts
             {
                 if (value != _facingRight)
                 {
-                    FlipSprite();
+                    GameController.FlipSprite(gameObject);
                 }
                 
                 _facingRight = value;
@@ -104,14 +104,6 @@ namespace Assets.Skripts
         private void UpdateMovementMetrics()
         {
             rigidBody.velocity = new Vector2(horizontalSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void FlipSprite()
-        {
-            Vector3 newScale = transform.localScale;
-            newScale.x *= -1;
-            transform.localScale = newScale;
         }
         #endregion
     }
