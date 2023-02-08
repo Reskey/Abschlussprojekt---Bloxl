@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
+using System.Threading;
 
 namespace Assets.Skripts
 {
@@ -12,44 +14,42 @@ namespace Assets.Skripts
     {
         private void MovePerform(CallbackContext context)
         {
-            //rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-
-            animator.SetBool("IsRunning", true);
-
+            animator.SetBool(RunningParameter, true);
+            
             float direction = context.ReadValue<float>();
 
             facingRight = direction > 0;
 
-            currentSpeed = (direction) * Variable_Speed;
+            Interlocked.Exchange(ref horizontalSpeed, direction * Variable_Speed);
+
+            rigidBody.constraints = move;
         }
 
         private void MoveEnd(CallbackContext context)
         {
-            animator.SetBool("IsRunning", false);
+            animator.SetBool(RunningParameter, false);
 
-            currentSpeed = 0f;
+            Interlocked.Exchange(ref horizontalSpeed, 0f);
 
             if (!isGrounded)
             {
                 rigidBody.velocity /= 1.5f;
-
+                
                 return;
             }
 
-            //rigidBody.constraints |= RigidbodyConstraints2D.FreezePositionX;
-
-            rigidBody.velocity = Vector2.zero;
+            rigidBody.constraints = dontMove;
         }
 
         private void Jump(CallbackContext context)
         {
             if (isGrounded)
             {
-                jumpSound.Play();
+                //isGrounded = false;
 
-                animator.SetBool("IsJumping", true);
+                animator.SetBool(JumpingParameter, true);
 
-                rigidBody.AddForce(jumpForce * Jump_Force, ForceMode2D.Impulse);
+                rigidBody.AddForce(jumpForce * Jump_Force);
             }
         }
 
@@ -57,13 +57,13 @@ namespace Assets.Skripts
         {
             if (!isGrounded)
             {
-                rigidBody.gravityScale = 10;
+                rigidBody.gravityScale = 8;
             }
         }
 
         private void FastFallEnd(CallbackContext context)
         {
-            rigidBody.gravityScale = 6;
+            rigidBody.gravityScale = 4;
         }
     }
 }
