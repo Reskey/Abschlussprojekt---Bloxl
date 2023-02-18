@@ -49,7 +49,7 @@ namespace Assets.Skripts
 
                 animator.SetBool(JumpingParameter, true);
 
-                rigidBody.AddForce(jumpForce * Jump_Force);
+                rigidBody.AddForce(jumpForce * (Jump_Force * 5));
             }
         }
 
@@ -57,7 +57,7 @@ namespace Assets.Skripts
         {
             if (!isGrounded)
             {
-                rigidBody.gravityScale = 8;
+                rigidBody.gravityScale = 12;
             }
         }
 
