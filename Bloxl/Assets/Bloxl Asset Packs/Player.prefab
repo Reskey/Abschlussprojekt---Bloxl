@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2061978440567451390}
   - component: {fileID: 2061978440567451386}
-  - component: {fileID: 2523982063883640450}
   - component: {fileID: 2061978440567451389}
   - component: {fileID: 332479145976482254}
   - component: {fileID: 2061978440567451387}
+  - component: {fileID: 7110348072110474450}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -89,31 +89,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2523982063883640450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2061978440567451377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a9b6265372c4144a84aa5ecd32c3a16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Jump_Force: 1000
-  Variable_Speed: 9000
-  groundCheck: {fileID: 2061978442150269981}
-  capsuleCollider2D: {fileID: 0}
-  groundCheckHeight: 0.2
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  slopeCheckDistance: 0
-  notSlipperyMaterial: {fileID: 0}
-  slipperyMaterial: {fileID: 0}
-  slopeCheckVisuals: 1
-  groundCheckVisuals: 1
 --- !u!50 &2061978440567451389
 Rigidbody2D:
   serializedVersion: 4
@@ -181,6 +156,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &7110348072110474450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061978440567451377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a9b6265372c4144a84aa5ecd32c3a16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Jump_Force: 1000
+  Variable_Speed: 373
+  groundCheck: {fileID: 2061978442150269981}
+  capsuleCollider2D: {fileID: 332479145976482254}
+  groundCheckHeight: 0.2
+  jumpSound: {fileID: 0}
+  runSound: {fileID: 0}
+  slopeCheckVisuals: 1
+  groundCheckVisuals: 0
 --- !u!1 &2061978442150269980
 GameObject:
   m_ObjectHideFlags: 0
