@@ -44,8 +44,8 @@ SpriteAtlas:
     secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
-    - {fileID: 2800000, guid: 189cc0b1a99145f4c9d79e1829ae6e11, type: 3}
     - {fileID: 2800000, guid: f834fb39c75a1a2468a44cda88f942b1, type: 3}
+    - {fileID: 2800000, guid: 189cc0b1a99145f4c9d79e1829ae6e11, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -83,6 +83,8 @@ SpriteAtlas:
   - {fileID: 1819461306, guid: 189cc0b1a99145f4c9d79e1829ae6e11, type: 3}
   - {fileID: -951078121, guid: 189cc0b1a99145f4c9d79e1829ae6e11, type: 3}
   - {fileID: 1755588465, guid: 189cc0b1a99145f4c9d79e1829ae6e11, type: 3}
+  - {fileID: 1551536876, guid: 189cc0b1a99145f4c9d79e1829ae6e11, type: 3}
+  - {fileID: 532344781, guid: 189cc0b1a99145f4c9d79e1829ae6e11, type: 3}
   - {fileID: -1454229910, guid: 189cc0b1a99145f4c9d79e1829ae6e11, type: 3}
   - {fileID: 1899157877, guid: 189cc0b1a99145f4c9d79e1829ae6e11, type: 3}
   - {fileID: -1449483899, guid: 189cc0b1a99145f4c9d79e1829ae6e11, type: 3}
@@ -255,6 +257,8 @@ SpriteAtlas:
   - Tileset_36
   - Tileset_40
   - Tileset_41
+  - Tileset_42
+  - Tileset_43
   - Tileset_0
   - Tileset_1
   - Tileset_2
