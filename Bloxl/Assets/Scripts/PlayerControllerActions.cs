@@ -74,7 +74,8 @@ namespace Assets.Skripts
 
             foreach (Collider2D enemy in hitEnemies)
             {
-                Debug.Log("HIT:" + enemy.name);
+                if (isGrounded) enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                else enemy.GetComponent<Enemy>().TakeDamage(criticalDamage);
             }
         }
     }

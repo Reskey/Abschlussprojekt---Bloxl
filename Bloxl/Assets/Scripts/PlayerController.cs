@@ -24,16 +24,15 @@ namespace Assets.Skripts
         [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
         [SerializeField] private BoxCollider2D capsuleCollider2D;
         [SerializeField, Range(0f, 5f)] private float groundCheckHeight = 0.2f;
-        [SerializeField] private LayerMask enemyLayers;
+        
+        [Space(10), Header("Combat"), SerializeField] private LayerMask enemyLayers;
         [SerializeField] private Transform attackPoint;
-        [SerializeField] private float attackRange = 0.5f;
-
+        [SerializeField, Range(0f, 5f)] private float attackRange = 0.5f;
+        [SerializeField] private int attackDamage;
+        [SerializeField] private int criticalDamage;
 
         [Space(10), Header("Sounds"), SerializeField] private AudioSource jumpSound;
         [SerializeField] private AudioSource runSound;
-
-        [Space(10), Header("Debug Options"), SerializeField] private bool slopeCheckVisuals = true;
-        [SerializeField] private bool groundCheckVisuals = true;
 
         private Inputs inputAction;
         private Animator animator;
