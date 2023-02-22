@@ -46,11 +46,11 @@ namespace Assets.Skripts
         {
             if (isGrounded)
             {
-                //isGrounded = false;
+                isGrounded = false;
 
                 animator.SetBool(JumpingParameter, true);
 
-                rigidBody.AddForce(jumpForce * (Jump_Force * 5));
+                rigidBody.AddForce(jumpForce * Jump_Force);
             }
         }
 
@@ -58,48 +58,13 @@ namespace Assets.Skripts
         {
             if (!isGrounded)
             {
-                rigidBody.gravityScale = 12;
+                rigidBody.gravityScale = 8;
             }
         }
 
         private void FastFallEnd(CallbackContext context)
         {
             rigidBody.gravityScale = 4;
-        }
-
-
-
-
-        bool canAttack = true;
-
-        private IEnumerator AttackCooldown()
-        {
-            canAttack = false;
-
-            for (int i = 0; i < 16; i++)
-            {
-                yield return new WaitForFixedUpdate();
-            }
-
-            canAttack = true;
-        }
-
-        private void Attack(CallbackContext context)
-        {
-            if (canAttack)
-            {
-                StartCoroutine(AttackCooldown());
-
-                animator.SetTrigger("Attack");
-
-                Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
-
-                foreach (Collider2D enemy in hitEnemies)
-                {
-                    if (isGrounded) enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-                    else enemy.GetComponent<Enemy>().TakeDamage(criticalDamage);
-                }
-            }
         }
     }
 }

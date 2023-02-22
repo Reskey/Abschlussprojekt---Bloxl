@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEngine.InputSystem.InputAction;
 
-
 namespace Assets.Skripts
 {
     public partial class PlayerController : MonoBehaviour
@@ -21,26 +20,9 @@ namespace Assets.Skripts
         [Header("Variable Forces"), SerializeField, Range(0, 1000)] private int Jump_Force = 0;
         [SerializeField, Range(0, 1000)] private int Variable_Speed = 1;
 
-        [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
-        [SerializeField] private BoxCollider2D capsuleCollider2D;
-        [SerializeField, Range(0f, 5f)] private float groundCheckHeight = 0.2f;
-
-        [Space(10), Header("Combat"), SerializeField] private int playerMaxHealth;
-        private int playerHealth;
-        [SerializeField] private LayerMask enemyLayers;
-        [SerializeField] private Transform attackPoint;
-        [SerializeField, Range(0f, 5f)] private float attackRange = 0.5f;
-        [SerializeField] private int attackDamage;
-        [SerializeField] private int criticalDamage;
-        [SerializeField] private int maxHealth;
-
-        [Space(10), Header("Sounds"), SerializeField] private AudioSource jumpSound;
-        [SerializeField] private AudioSource runSound;
-
         private Inputs inputAction;
         private Animator animator;
         private Rigidbody2D rigidBody;
-        [SerializeField] private HealthBar healthBar;
 
         private Vector2 jumpForce = Vector2.up;
 
@@ -61,7 +43,7 @@ namespace Assets.Skripts
             }
         }
 
-        private bool isGrounded => Physics2D.OverlapBoxAll(capsuleCollider2D.bounds.center + new Vector3(0f, -capsuleCollider2D.size.y, 0f), new Vector2(capsuleCollider2D.bounds.size.x - 0.2f, groundCheckHeight), 0f).Any(x => x.gameObject != this.gameObject);
+        private volatile bool isGrounded = false;
         #endregion
 
         #region Monobehaviour Methods    
@@ -79,8 +61,6 @@ namespace Assets.Skripts
 
             inputAction.PlayerBasics.Fastfall.started += FastFallStart;
             inputAction.PlayerBasics.Fastfall.canceled += FastFallEnd;
-
-            inputAction.PlayerBasics.Attack.performed += Attack;
         }
 
         void Start()
@@ -91,10 +71,6 @@ namespace Assets.Skripts
             {
                 friction = 0
             };
-
-            healthBar.SetMaxHealth(100);
-
-            playerHealth = maxHealth;
         }
 
         void FixedUpdate()
@@ -103,8 +79,11 @@ namespace Assets.Skripts
             {
                 UpdateMovementMetrics();
             }
+        }
 
-            if (isGrounded)
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision is TilemapCollider2D or CompositeCollider2D)
             {
                 FastFallEnd(default);
 
@@ -114,25 +93,10 @@ namespace Assets.Skripts
                 {
                     rigidBody.constraints = dontMove;
                 }
+
+                isGrounded = true;
             }
         }
-
-        void OnDrawGizmosSelected()
-        {
-            Gizmos.DrawRay(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight));
-            Gizmos.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight));
-            Gizmos.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y + groundCheckHeight), Vector2.right * (capsuleCollider2D.size.x * 2));
-
-            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
-        }
-
-        /*private void OnTriggerEnter2D(Collider2D collision)
-        {
-            if (collision is TilemapCollider2D or CompositeCollider2D)
-            {
-                
-            }
-        }*/
         #endregion
 
         #region Internal Methods
@@ -140,12 +104,6 @@ namespace Assets.Skripts
         private void UpdateMovementMetrics()
         {
             rigidBody.velocity = new Vector2(horizontalSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
-        }
-
-        public void TakeDamage(int hp)
-        {
-            playerHealth -= hp;
-            healthBar.SetHealth(playerHealth);
         }
         #endregion
     }
