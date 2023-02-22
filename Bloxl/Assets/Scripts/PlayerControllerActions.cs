@@ -46,11 +46,11 @@ namespace Assets.Skripts
         {
             if (isGrounded)
             {
-                //isGrounded = false;
+                isGrounded = false;
 
                 animator.SetBool(JumpingParameter, true);
 
-                rigidBody.AddForce(jumpForce * (Jump_Force * 5));
+                rigidBody.AddForce(jumpForce * Jump_Force);
             }
         }
 
@@ -58,7 +58,7 @@ namespace Assets.Skripts
         {
             if (!isGrounded)
             {
-                rigidBody.gravityScale = 12;
+                rigidBody.gravityScale = 8;
             }
         }
 

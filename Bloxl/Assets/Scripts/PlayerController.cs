@@ -61,7 +61,7 @@ namespace Assets.Skripts
             }
         }
 
-        private bool isGrounded => Physics2D.OverlapBoxAll(capsuleCollider2D.bounds.center + new Vector3(0f, -capsuleCollider2D.size.y, 0f), new Vector2(capsuleCollider2D.bounds.size.x - 0.2f, groundCheckHeight), 0f).Any(x => x.gameObject != this.gameObject);
+        private volatile bool isGrounded = false;
         #endregion
 
         #region Monobehaviour Methods    
@@ -104,7 +104,11 @@ namespace Assets.Skripts
                 UpdateMovementMetrics();
             }
 
-            if (isGrounded)
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision is TilemapCollider2D or CompositeCollider2D)
             {
                 FastFallEnd(default);
 
@@ -114,6 +118,8 @@ namespace Assets.Skripts
                 {
                     rigidBody.constraints = dontMove;
                 }
+
+                isGrounded = true;
             }
         }
 
