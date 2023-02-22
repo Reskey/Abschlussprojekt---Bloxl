@@ -15,11 +15,11 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        inputController = FindObjectOfType<GameController>().inputControlls;
+        //inputController = FindObjectOfType<GameController>().inputControlls;
 
-        inputController.PauseMenu.Enable();
+        //inputController.PauseMenu.Enable();
 
-        inputController.PauseMenu.Pause.started += PauseAction;
+        //inputController.PauseMenu.Pause.started += PauseAction;
     }
 
     private void PauseAction(CallbackContext context)

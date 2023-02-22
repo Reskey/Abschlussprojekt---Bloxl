@@ -13,6 +13,7 @@ namespace Assets.Skripts
     public partial class PlayerController : MonoBehaviour
     {
         #region Attributes
+        private bool doubleJumpAvailable = false;
         internal const string RunningParameter = "IsRunning";
         internal const string JumpingParameter = "IsJumping";
         internal const RigidbodyConstraints2D dontMove = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
