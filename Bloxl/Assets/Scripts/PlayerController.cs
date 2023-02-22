@@ -24,12 +24,15 @@ namespace Assets.Skripts
         [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
         [SerializeField] private BoxCollider2D capsuleCollider2D;
         [SerializeField, Range(0f, 5f)] private float groundCheckHeight = 0.2f;
-        
-        [Space(10), Header("Combat"), SerializeField] private LayerMask enemyLayers;
+
+        [Space(10), Header("Combat"), SerializeField] private int playerMaxHealth;
+        private int playerHealth;
+        [SerializeField] private LayerMask enemyLayers;
         [SerializeField] private Transform attackPoint;
         [SerializeField, Range(0f, 5f)] private float attackRange = 0.5f;
         [SerializeField] private int attackDamage;
         [SerializeField] private int criticalDamage;
+        [SerializeField] private int maxHealth;
 
         [Space(10), Header("Sounds"), SerializeField] private AudioSource jumpSound;
         [SerializeField] private AudioSource runSound;
@@ -37,6 +40,7 @@ namespace Assets.Skripts
         private Inputs inputAction;
         private Animator animator;
         private Rigidbody2D rigidBody;
+        [SerializeField] private HealthBar healthBar;
 
         private Vector2 jumpForce = Vector2.up;
 
@@ -50,7 +54,7 @@ namespace Assets.Skripts
             {
                 if (value != _facingRight)
                 {
-                    FlipSprite();
+                    GameController.FlipSprite(gameObject);
                 }
                 
                 _facingRight = value;
@@ -87,6 +91,10 @@ namespace Assets.Skripts
             {
                 friction = 0
             };
+
+            healthBar.SetMaxHealth(100);
+
+            playerHealth = maxHealth;
         }
 
         void FixedUpdate()
@@ -134,12 +142,10 @@ namespace Assets.Skripts
             rigidBody.velocity = new Vector2(horizontalSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void FlipSprite()
+        public void TakeDamage(int hp)
         {
-            Vector3 newScale = transform.localScale;
-            newScale.x *= -1;
-            transform.localScale = newScale;
+            playerHealth -= hp;
+            healthBar.SetHealth(playerHealth);
         }
         #endregion
     }

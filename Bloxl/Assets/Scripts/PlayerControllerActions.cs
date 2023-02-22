@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
 using System.Threading;
+using System.Collections;
 
 namespace Assets.Skripts
 {
@@ -66,16 +67,38 @@ namespace Assets.Skripts
             rigidBody.gravityScale = 4;
         }
 
+
+
+
+        bool canAttack = true;
+
+        private IEnumerator AttackCooldown()
+        {
+            canAttack = false;
+
+            for (int i = 0; i < 16; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            canAttack = true;
+        }
+
         private void Attack(CallbackContext context)
         {
-            animator.SetTrigger("Attack");
-
-            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
-
-            foreach (Collider2D enemy in hitEnemies)
+            if (canAttack)
             {
-                if (isGrounded) enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-                else enemy.GetComponent<Enemy>().TakeDamage(criticalDamage);
+                StartCoroutine(AttackCooldown());
+
+                animator.SetTrigger("Attack");
+
+                Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+
+                foreach (Collider2D enemy in hitEnemies)
+                {
+                    if (isGrounded) enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                    else enemy.GetComponent<Enemy>().TakeDamage(criticalDamage);
+                }
             }
         }
     }
