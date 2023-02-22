@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,9 +6,13 @@ using UnityEngine.EventSystems;
 
 public class RedDemon : MonoBehaviour
 {
-    private const float normalSpeed = .01f;
-    private const float aggroSpeed = .011f;
+    private const string AttackParameter = "IsAttacking";
+    private const float normalSpeed = .07f;
+    private const float aggroSpeed = .15f;
     private const float patrolDistance = 8f;
+
+    private Animator animator;
+    private Rigidbody2D rigidbody;
 
     private WaitUntil idleWalkWait;
     private WaitWhile stalkWait;
@@ -18,6 +23,21 @@ public class RedDemon : MonoBehaviour
 
     GameObject targetRef = null!;
 
+    private volatile bool _facingRight = true;
+    private bool facingRight
+    {
+        get => _facingRight;
+        set
+        {
+            if (value != _facingRight)
+            {
+                GameController.FlipSprite(gameObject);
+            }
+
+            _facingRight = value;
+        }
+    }
+
     private volatile float speed = normalSpeed;
 
     private volatile bool stalkTarget = false;
@@ -26,6 +46,9 @@ public class RedDemon : MonoBehaviour
 
     void Start()
     {
+        rigidbody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+
         rootPos = pos;
 
         idleWalkWait = new WaitUntil(() => Vector2.Distance(pos, target) < .3f);
@@ -37,17 +60,34 @@ public class RedDemon : MonoBehaviour
             return stalkTarget;
         });
 
-        GetComponent<Rigidbody2D>().sharedMaterial = new PhysicsMaterial2D()
+        rigidbody.sharedMaterial = new PhysicsMaterial2D()
         {
-            friction = 1
+            friction = 2
         };
 
-        StartCoroutine(MovementBehaviour()); 
+        StartCoroutine(MovementBehaviour());
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        transform.position = (Vector3)Vector2.MoveTowards(pos, target, speed);
+        facingRight = (target - pos).x > 0;
+
+        var x = Vector2.MoveTowards(pos, target, speed);
+
+        var y = transform.position;
+
+        y.x = x.x;
+
+        transform.position = y;
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+        {
+            //Attack mäsich
+            //Cooldown mäsich und so
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -60,7 +100,7 @@ public class RedDemon : MonoBehaviour
 
             StopAllCoroutines();
 
-            StartCoroutine(FollowBehaviour(collision.gameObject));
+            StartCoroutine(FollowBehaviour());
         }
     }
 
@@ -73,6 +113,8 @@ public class RedDemon : MonoBehaviour
             speed = normalSpeed;
 
             targetRef = null!;
+
+            animator.SetBool(AttackParameter, false);
 
             StopAllCoroutines();
 
@@ -95,16 +137,14 @@ public class RedDemon : MonoBehaviour
             _ => Vector2.zero
         };
 
-        GameController.FlipSprite(gameObject);
-
         StartCoroutine(MovementBehaviour());
     }
 
-    private IEnumerator FollowBehaviour(GameObject foundPos)
+    private IEnumerator FollowBehaviour()
     {
-        speed = aggroSpeed;
+        animator.SetBool(AttackParameter, true);
 
-        targetRef = foundPos;
+        speed = aggroSpeed;
 
         yield return stalkWait;
     }

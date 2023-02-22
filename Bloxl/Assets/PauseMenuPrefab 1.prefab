@@ -753,4 +753,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3c6cc5b548346a43a20d1198b1f935d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 4311798384453342939}
+  pauseMenuCanvasObject: {fileID: 4311798384453342939}

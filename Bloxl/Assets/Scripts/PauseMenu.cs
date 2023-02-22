@@ -32,7 +32,7 @@ public class PauseMenu : MonoBehaviour
 
         pauseMenuCanvasObject.SetActive(isPaused);
 
-        Time.timeScale = Convert.ToSingle(isPaused);
+        Time.timeScale = Convert.ToSingle(!isPaused);
 
         if (isPaused)
         {

@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
 using System.Threading;
+using System.Collections;
 
 namespace Assets.Skripts
 {
