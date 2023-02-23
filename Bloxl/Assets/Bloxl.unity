@@ -1482,7 +1482,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1722388894}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &875658346
 GameObject:
@@ -6165,7 +6165,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1722388894}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1055121028
 MonoBehaviour:
@@ -53051,6 +53051,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 332479145976482254, guid: 16ef489b219511e4190e2080a8529161, type: 3}
+      propertyPath: m_Size.y
+      value: 0.8432658
+      objectReference: {fileID: 0}
+    - target: {fileID: 332479145976482254, guid: 16ef489b219511e4190e2080a8529161, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.078367114
+      objectReference: {fileID: 0}
+    - target: {fileID: 332479145976482254, guid: 16ef489b219511e4190e2080a8529161, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2061978440567451377, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -53195,6 +53207,18 @@ PrefabInstance:
       propertyPath: plaformLayer.m_Bits
       value: 64
       objectReference: {fileID: 0}
+    - target: {fileID: 5583894690561222625, guid: 16ef489b219511e4190e2080a8529161, type: 3}
+      propertyPath: m_Size.y
+      value: 0.93116015
+      objectReference: {fileID: 0}
+    - target: {fileID: 5583894690561222625, guid: 16ef489b219511e4190e2080a8529161, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.13325027
+      objectReference: {fileID: 0}
+    - target: {fileID: 5583894690561222625, guid: 16ef489b219511e4190e2080a8529161, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6394529099481815786, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: m_Name
       value: Player
@@ -53269,7 +53293,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7110348072110474450, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: Jump_Force
-      value: 226
+      value: 598
       objectReference: {fileID: 0}
     - target: {fileID: 7110348072110474450, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: attackPoint
@@ -53301,6 +53325,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
+    - {fileID: 7972403956893620951, guid: 16ef489b219511e4190e2080a8529161, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 16ef489b219511e4190e2080a8529161, type: 3}
 --- !u!61 &2002514065 stripped
 BoxCollider2D:

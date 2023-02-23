@@ -58,7 +58,7 @@ public class RedDemon : MonoBehaviour
 
         stalkWait = new WaitWhile(() =>
         {
-            target = (Vector2)targetRef?.transform.position;
+            if (targetRef is not null) target = (Vector2)targetRef.transform.position;
 
             return stalkTarget;
         });
@@ -91,7 +91,6 @@ public class RedDemon : MonoBehaviour
             var player = collision.collider.gameObject.GetComponent<PlayerController>();
             player.TakeDamage(20);
             StartCoroutine(AttackCooldown());
-
         }
     }
 
@@ -103,7 +102,7 @@ public class RedDemon : MonoBehaviour
 
             stalkTarget = true;
 
-            StopAllCoroutines();
+            StopCoroutine(MovementBehaviour());
 
             StartCoroutine(FollowBehaviour());
         }
@@ -121,7 +120,7 @@ public class RedDemon : MonoBehaviour
 
             animator.SetBool(AttackParameter, false);
 
-            StopAllCoroutines();
+            StopCoroutine(FollowBehaviour());
 
             StartCoroutine(MovementBehaviour());
         }
