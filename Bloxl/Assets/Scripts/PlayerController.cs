@@ -132,13 +132,6 @@ namespace Assets.Skripts
             Gizmos.DrawWireSphere(attackPoint.position, attackRange);
         }
 
-        /*private void OnTriggerEnter2D(Collider2D collision)
-        {
-            if (collision is TilemapCollider2D or CompositeCollider2D)
-            {
-                
-            }
-        }*/
         #endregion
 
         #region Internal Methods
@@ -151,6 +144,12 @@ namespace Assets.Skripts
         public void TakeDamage(int hp)
         {
             playerHealth -= hp;
+
+            if (playerHealth <= 0)
+            {
+
+            }
+
             healthBar.SetHealth(playerHealth);
         }
         #endregion
