@@ -5,24 +5,37 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Assets.Skripts.Management;
 using static UnityEngine.InputSystem.InputAction;
+using Assets.Scripts;
 
-namespace Assets.Skripts
+namespace Assets.Skripts.Player
 {
-    public partial class PlayerController : MonoBehaviour
+    public partial class PlayerController : MonoBehaviour, IDamageable
     {
         #region Attributes
         internal const string RunningParameter = "IsRunning";
         internal const string JumpingParameter = "IsJumping";
+        internal const string AttackParameter = "Attack";
         internal const RigidbodyConstraints2D dontMove = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         internal const RigidbodyConstraints2D move = RigidbodyConstraints2D.FreezeRotation;
 
         [Header("Variable Forces"), SerializeField, Range(0, 1000)] private int Jump_Force = 0;
         [SerializeField, Range(0, 1000)] private int Variable_Speed = 1;
 
+        [Space(10), Header("Combat"), SerializeField] private LayerMask enemyLayers;
+        [SerializeField] private Transform attackPoint;
+        [SerializeField, Range(0f, 5f)] private float attackRange = 0.5f;
+        [SerializeField] private int attackDamage;
+        [SerializeField] private int criticalDamage;
+
         private Inputs inputAction;
         private Animator animator;
         private Rigidbody2D rigidBody;
+
+        [SerializeField] private GameObject healthBarObject;
+
+        private HealthBar healthBar;
 
         private Vector2 jumpForce = Vector2.up;
 
@@ -44,6 +57,7 @@ namespace Assets.Skripts
         }
 
         private volatile bool isGrounded = false;
+        private volatile bool canAttack = true;
         #endregion
 
         #region Monobehaviour Methods    
@@ -61,10 +75,16 @@ namespace Assets.Skripts
 
             inputAction.PlayerBasics.Fastfall.started += FastFallStart;
             inputAction.PlayerBasics.Fastfall.canceled += FastFallEnd;
+
+            inputAction.PlayerBasics.Attack.started += AttackPerform;
         }
 
         void Start()
         {
+            healthBar = healthBarObject.GetComponent<HealthBar>();
+
+            healthBar.SetMaxHealth(100);
+
             inputAction.PlayerBasics.Enable();
 
             rigidBody.sharedMaterial = new PhysicsMaterial2D("Verbuggter kekw")
@@ -100,11 +120,41 @@ namespace Assets.Skripts
         #endregion
 
         #region Internal Methods
+        public void Die()
+        {
+            MonoBehaviour.Destroy(gameObject);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void TakeDamage(float damage)
+        {
+            var currentHealth = healthBar.GetHealth();
+
+            healthBar.SetHealth(currentHealth - damage);
+
+            if (currentHealth <= 0)
+            {
+                Die();
+            }
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void UpdateMovementMetrics()
         {
             rigidBody.velocity = new Vector2(horizontalSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
         }
         #endregion
+
+        private IEnumerator AttackCooldown()
+        {
+            canAttack = false;
+
+            for (int i = 0; i < 32; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            canAttack = true;
+        }
     }
 }

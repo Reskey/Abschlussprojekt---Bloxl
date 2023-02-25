@@ -8,8 +8,10 @@ using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
 using System.Threading;
 using System.Collections;
+using static UnityEngine.EventSystems.EventTrigger;
+using Assets.Scripts;
 
-namespace Assets.Skripts
+namespace Assets.Skripts.Player
 {
     public partial class PlayerController
     {
@@ -65,6 +67,32 @@ namespace Assets.Skripts
         private void FastFallEnd(CallbackContext context)
         {
             rigidBody.gravityScale = 4;
+        }
+
+        private void AttackPerform(CallbackContext context)
+        {
+            if (canAttack)
+            {
+                StartCoroutine(AttackCooldown());
+
+                animator.SetTrigger(AttackParameter);
+
+                Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+
+                foreach (Collider2D hitTarget in hitEnemies.Where(x => !x.isTrigger))
+                {
+                    IDamageable enemy = hitTarget.GetComponent<IDamageable>();
+
+                    if (isGrounded)
+                    {
+                        enemy.TakeDamage(attackDamage);
+                    }
+                    else
+                    {
+                        enemy.TakeDamage(criticalDamage);
+                    }
+                }
+            }
         }
     }
 }
