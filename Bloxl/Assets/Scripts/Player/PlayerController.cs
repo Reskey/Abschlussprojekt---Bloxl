@@ -58,6 +58,8 @@ namespace Assets.Skripts.Player
 
         private volatile bool isGrounded = false;
         private volatile bool canAttack = true;
+
+        private byte jumps = 2;
         #endregion
 
         #region Monobehaviour Methods    
@@ -103,8 +105,10 @@ namespace Assets.Skripts.Player
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision is TilemapCollider2D or CompositeCollider2D)
+            if (!collision.isTrigger)
             {
+                jumps = 2;
+
                 FastFallEnd(default);
 
                 animator.SetBool(JumpingParameter, false);
@@ -120,6 +124,17 @@ namespace Assets.Skripts.Player
         #endregion
 
         #region Internal Methods
+        private void DoubleJump()
+        {
+            Vector2 x = rigidBody.velocity;
+
+            x.y = 0;
+
+            rigidBody.velocity = x;
+
+            rigidBody.AddForce(jumpForce * Jump_Force);
+        }
+
         public void Die()
         {
             MonoBehaviour.Destroy(gameObject);

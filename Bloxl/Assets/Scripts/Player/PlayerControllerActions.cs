@@ -8,7 +8,6 @@ using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
 using System.Threading;
 using System.Collections;
-using static UnityEngine.EventSystems.EventTrigger;
 using Assets.Scripts;
 
 namespace Assets.Skripts.Player
@@ -46,13 +45,19 @@ namespace Assets.Skripts.Player
 
         private void Jump(CallbackContext context)
         {
-            if (isGrounded)
+            if (jumps > 0)
             {
-                isGrounded = false;
+                jumps--;
 
                 animator.SetBool(JumpingParameter, true);
 
+                Vector2 x = rigidBody.velocity;
+                x.y = 0;
+                rigidBody.velocity = x;
+
                 rigidBody.AddForce(jumpForce * Jump_Force);
+
+                isGrounded = false;
             }
         }
 
