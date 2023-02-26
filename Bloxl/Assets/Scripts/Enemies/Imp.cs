@@ -1,3 +1,4 @@
+using Assets.Skripts.Management;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -29,6 +30,21 @@ public class Imp : MonoBehaviour
     private volatile bool targetAquired = false;
     private volatile bool canAttack = true;
 
+    private volatile bool _facingRight = false;
+    private bool facingRight
+    {
+        get => _facingRight;
+        set
+        {
+            if (value != _facingRight)
+            {
+                GameController.FlipSprite(gameObject);
+            }
+
+            _facingRight = value;
+        }
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -53,12 +69,12 @@ public class Imp : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        //Gizmos.DrawLine(rootArea, rootArea + new Vector2(4, 0));
-        //Gizmos.DrawLine(rootArea, rootArea + new Vector2(-4, 0));
-        //Gizmos.DrawLine(rootArea, rootArea + new Vector2(0, 4));
-        //Gizmos.DrawLine(rootArea, rootArea + new Vector2(0, -4));
+        Gizmos.DrawLine(rootArea, rootArea + new Vector2(4, 0));
+        Gizmos.DrawLine(rootArea, rootArea + new Vector2(-4, 0));
+        Gizmos.DrawLine(rootArea, rootArea + new Vector2(0, 4));
+        Gizmos.DrawLine(rootArea, rootArea + new Vector2(0, -4));
 
-        Gizmos.DrawSphere(rootArea, 4);
+        //Gizmos.DrawSphere(rootArea, 4);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -110,6 +126,8 @@ public class Imp : MonoBehaviour
             true => (Vector2)targetRef.transform.position
         };
 
+        facingRight = target.x < pos.x;
+
         yield return followCurrentTargetWait;
 
         animator.SetBool(RunningParameter, false);
@@ -122,7 +140,7 @@ public class Imp : MonoBehaviour
     private IEnumerator AttackCooldown()
     {
         canAttack = true;
-
+        
         for (int i = 0; i < 40; i++)
         {
             yield return new WaitForFixedUpdate();

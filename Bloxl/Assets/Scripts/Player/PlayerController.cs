@@ -124,17 +124,6 @@ namespace Assets.Skripts.Player
         #endregion
 
         #region Internal Methods
-        private void DoubleJump()
-        {
-            Vector2 x = rigidBody.velocity;
-
-            x.y = 0;
-
-            rigidBody.velocity = x;
-
-            rigidBody.AddForce(jumpForce * Jump_Force);
-        }
-
         public void Die()
         {
             MonoBehaviour.Destroy(gameObject);
