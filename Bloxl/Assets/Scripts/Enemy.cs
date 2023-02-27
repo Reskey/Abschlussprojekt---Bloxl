@@ -16,15 +16,19 @@ public class Enemy : MonoBehaviour
     {
         currentHealth -= dmg;
 
+
         if (currentHealth <= 0)
         {
-            //STERBEN ALLA
             Die();
+            return;
         }
+
+        FindObjectOfType<GameController>().HitPopUp(dmg, gameObject);
+
     }
 
     void Die()
     {
-
+        BreakObj.BreakObjectIntoPieces(gameObject, 100, 5.8f, 0, 6);
     }
 }

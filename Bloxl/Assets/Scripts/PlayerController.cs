@@ -129,7 +129,7 @@ namespace Assets.Skripts
             Gizmos.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight));
             Gizmos.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y + groundCheckHeight), Vector2.right * (capsuleCollider2D.size.x * 2));
 
-            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+            Gizmos.DrawWireSphere(attackPoint.transform.position, attackRange);
         }
 
         #endregion
@@ -145,9 +145,11 @@ namespace Assets.Skripts
         {
             playerHealth -= hp;
 
+            FindObjectOfType<GameController>().HitPopUp(hp, gameObject);
+
             if (playerHealth <= 0)
             {
-
+                
             }
 
             healthBar.SetHealth(playerHealth);

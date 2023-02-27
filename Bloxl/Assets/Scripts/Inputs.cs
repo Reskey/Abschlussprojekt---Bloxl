@@ -62,6 +62,15 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart"",
+                    ""type"": ""Button"",
+                    ""id"": ""98a69588-6f21-42d5-8feb-f86d0e2164c8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -130,6 +139,17 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""10564089-f67b-4ddc-a2d1-4de24db6d2ca"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -170,6 +190,7 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
         m_PlayerBasics_Jump = m_PlayerBasics.FindAction("Jump", throwIfNotFound: true);
         m_PlayerBasics_Fastfall = m_PlayerBasics.FindAction("Fastfall", throwIfNotFound: true);
         m_PlayerBasics_Attack = m_PlayerBasics.FindAction("Attack", throwIfNotFound: true);
+        m_PlayerBasics_Restart = m_PlayerBasics.FindAction("Restart", throwIfNotFound: true);
         // PauseMenu
         m_PauseMenu = asset.FindActionMap("PauseMenu", throwIfNotFound: true);
         m_PauseMenu_Pause = m_PauseMenu.FindAction("Pause", throwIfNotFound: true);
@@ -236,6 +257,7 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerBasics_Jump;
     private readonly InputAction m_PlayerBasics_Fastfall;
     private readonly InputAction m_PlayerBasics_Attack;
+    private readonly InputAction m_PlayerBasics_Restart;
     public struct PlayerBasicsActions
     {
         private @Inputs m_Wrapper;
@@ -244,6 +266,7 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerBasics_Jump;
         public InputAction @Fastfall => m_Wrapper.m_PlayerBasics_Fastfall;
         public InputAction @Attack => m_Wrapper.m_PlayerBasics_Attack;
+        public InputAction @Restart => m_Wrapper.m_PlayerBasics_Restart;
         public InputActionMap Get() { return m_Wrapper.m_PlayerBasics; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -265,6 +288,9 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                 @Attack.started -= m_Wrapper.m_PlayerBasicsActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_PlayerBasicsActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_PlayerBasicsActionsCallbackInterface.OnAttack;
+                @Restart.started -= m_Wrapper.m_PlayerBasicsActionsCallbackInterface.OnRestart;
+                @Restart.performed -= m_Wrapper.m_PlayerBasicsActionsCallbackInterface.OnRestart;
+                @Restart.canceled -= m_Wrapper.m_PlayerBasicsActionsCallbackInterface.OnRestart;
             }
             m_Wrapper.m_PlayerBasicsActionsCallbackInterface = instance;
             if (instance != null)
@@ -281,6 +307,9 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @Restart.started += instance.OnRestart;
+                @Restart.performed += instance.OnRestart;
+                @Restart.canceled += instance.OnRestart;
             }
         }
     }
@@ -324,6 +353,7 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnFastfall(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnRestart(InputAction.CallbackContext context);
     }
     public interface IPauseMenuActions
     {

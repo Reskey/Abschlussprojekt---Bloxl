@@ -8,6 +8,7 @@ using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
 using System.Threading;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Skripts
 {
@@ -94,10 +95,9 @@ namespace Assets.Skripts
 
                 Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
-                foreach (Collider2D enemy in hitEnemies)
+                foreach (Collider2D enemy in hitEnemies.Where(x => !x.isTrigger))
                 {
-                    if (isGrounded) enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-                    else enemy.GetComponent<Enemy>().TakeDamage(criticalDamage);
+                    enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
                 }
             }
         }
