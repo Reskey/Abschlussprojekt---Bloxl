@@ -158,6 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39ed1d48df002214a82f537da0c06928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackPrefab: {fileID: 3388449426212806168, guid: 98d62eb47b0de3b429ead264c91e0658, type: 3}
 --- !u!58 &96687947509754716
 CircleCollider2D:
   m_ObjectHideFlags: 0

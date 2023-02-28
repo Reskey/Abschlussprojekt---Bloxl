@@ -1,3 +1,4 @@
+using Assets.Scripts.Enemies;
 using Assets.Skripts.Management;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,8 @@ using UnityEngine;
 
 public class Imp : MonoBehaviour
 {
+    [SerializeField] GameObject attackPrefab;
+
     private const string RunningParameter = "IsRunning";
     private const float speed = .02f;
 
@@ -29,6 +32,18 @@ public class Imp : MonoBehaviour
 
     private volatile bool targetAquired = false;
     private volatile bool canAttack = true;
+
+    int state = 0;
+
+    private bool outOfRange
+    {
+        get
+        {
+            if (targetRef is null) return true;
+
+            return Vector2.Distance(pos, targetRef.transform.position) > 5;
+        }
+    }
 
     private volatile bool _facingRight = false;
     private bool facingRight
@@ -55,7 +70,7 @@ public class Imp : MonoBehaviour
         followCurrentTargetWait = new WaitUntil(delegate
         {
             pos = Vector2.MoveTowards(pos, target, speed);
-
+            
             return Vector2.Distance(pos, target) < .3f;
         });
 
@@ -97,13 +112,22 @@ public class Imp : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.collider.CompareTag("Player"))
+        if (collision.CompareTag("Player") & !outOfRange & canAttack)
         {
-            //Attack
+            canAttack = false;
 
-            StartCoroutine(AttackCooldown());
+            if (state is not 2) StopAllCoroutines();
+            StartCoroutine(AttackBehaviour());
+
+            return;
+        }
+
+        if (outOfRange && state is not 1)
+        {
+            StopAllCoroutines();
+            StartCoroutine(MovementBehaviour());
         }
     }
 
@@ -118,6 +142,8 @@ public class Imp : MonoBehaviour
 
     private IEnumerator MovementBehaviour()
     {
+        state = 1;
+
         animator.SetBool(RunningParameter, true);
 
         target = targetAquired switch
@@ -139,13 +165,35 @@ public class Imp : MonoBehaviour
 
     private IEnumerator AttackCooldown()
     {
-        canAttack = true;
+        canAttack = false;
         
-        for (int i = 0; i < 40; i++)
+        for (int i = 0; i < 150; i++)
         {
             yield return new WaitForFixedUpdate();
         }
 
-        canAttack = false;
+        canAttack = true;
+    }
+
+    private IEnumerator AttackBehaviour()
+    {
+        state = 2;
+
+        yield return idleWait;
+
+        StartCoroutine(AttackCooldown());
+
+        for (int i = 0; i < 25; i++)
+        {
+            var x = Instantiate(attackPrefab, transform.position, Quaternion.identity);
+
+            var y = x.AddComponent<ImpAttackArc>();
+
+            y.target = targetRef;
+
+            Destroy(x, 3);
+
+            yield return new WaitForSeconds(.07f);
+        }
     }
 }
