@@ -148,7 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e23dcf331797a742ba006179da9cb54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1000
+  maxHealth: 100
+  healItem: {fileID: 8233516861349902718, guid: 568207b080161bf41bf366a134fe1110, type: 3}
 --- !u!1 &228890422
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,6 +951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  healItem: {fileID: 8233516861349902718, guid: 568207b080161bf41bf366a134fe1110, type: 3}
 --- !u!1 &373834382
 GameObject:
   m_ObjectHideFlags: 0
@@ -6171,7 +6173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6984176988459469363, guid: ed29789946bc0014d9685863b22d7f91, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.09
+      value: -4.15
       objectReference: {fileID: 0}
     - target: {fileID: 6984176988459469363, guid: ed29789946bc0014d9685863b22d7f91, type: 3}
       propertyPath: m_LocalPosition.y
@@ -47778,6 +47780,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  healItem: {fileID: 0}
 --- !u!4 &1722388894 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2061978440567451390, guid: 16ef489b219511e4190e2080a8529161, type: 3}
@@ -47924,50 +47927,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4171353578367416100, guid: 16916241f819ce248beeb3e32dc4f006, type: 3}
   m_PrefabInstance: {fileID: 529902471}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1790854978
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1790854980}
-  - component: {fileID: 1790854979}
-  m_Layer: 0
-  m_Name: BreakInPieces
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1790854979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1790854978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9f8f6857388150419c44799940e27c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1790854980
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1790854978}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.851465, y: -1.7783879, z: 0.07567876}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 17
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1794576213 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2061978440567451377, guid: 16ef489b219511e4190e2080a8529161, type: 3}
@@ -49197,6 +49156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitpopup: {fileID: 7225752538734117052, guid: 6f75741027b58e6478fa678bad880d91, type: 3}
+  offset: {x: -1, y: 1, z: 0}
 --- !u!1 &1977513178
 GameObject:
   m_ObjectHideFlags: 0
@@ -53545,17 +53505,25 @@ PrefabInstance:
       propertyPath: plaformLayer.m_Bits
       value: 64
       objectReference: {fileID: 0}
+    - target: {fileID: 2547956750491628212, guid: 16ef489b219511e4190e2080a8529161, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 2547956750491628212, guid: 16ef489b219511e4190e2080a8529161, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.31
+      objectReference: {fileID: 0}
     - target: {fileID: 2996094779382050149, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5583894690561222625, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: m_Size.y
-      value: 0.93116015
+      value: 0.9311601
       objectReference: {fileID: 0}
     - target: {fileID: 5583894690561222625, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: m_Offset.y
-      value: -0.13325027
+      value: -0.1332503
       objectReference: {fileID: 0}
     - target: {fileID: 5583894690561222625, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: m_IsTrigger
@@ -53647,7 +53615,7 @@ PrefabInstance:
       objectReference: {fileID: 823314069}
     - target: {fileID: 7110348072110474450, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: attackRange
-      value: 0.47
+      value: 1.12
       objectReference: {fileID: 0}
     - target: {fileID: 7110348072110474450, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: attackDamage

@@ -5,6 +5,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 100;
+    [SerializeField] private GameObject healItem;
+
     int currentHealth;
 
     void Start()
@@ -12,23 +14,36 @@ public class Enemy : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    public void TakeDamage(int dmg)
+    public void TakeDamage(int dmg, Vector2 direction)
     {
         currentHealth -= dmg;
+
+        gameObject.GetComponent<Rigidbody2D>().AddForce(direction * 400f + Vector2.up * 100f);
 
 
         if (currentHealth <= 0)
         {
-            Die();
+            Die(direction);
             return;
         }
 
-        FindObjectOfType<GameController>().HitPopUp(dmg, gameObject);
+        FindObjectOfType<GameController>().HitPopUp(dmg, gameObject, direction);
 
     }
 
-    void Die()
+    void Die(Vector2 direction)
     {
-        BreakObj.BreakObjectIntoPieces(gameObject, 100, 5.8f, 0, 6);
+        FindObjectOfType<GameController>().BreakObjectIntoPieces(gameObject, 100, 5.8f, 0, 6, direction);
+
+        int rndNum = Random.Range(1, 5);
+
+        if (rndNum == 4)
+        {
+            GameObject item = healItem;
+
+            GameObject drop = MonoBehaviour.Instantiate(item, transform.position, Quaternion.identity);
+
+            MonoBehaviour.Destroy(drop, 10);
+        }
     }
 }

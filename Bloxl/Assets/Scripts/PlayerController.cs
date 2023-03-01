@@ -141,11 +141,11 @@ namespace Assets.Skripts
             rigidBody.velocity = new Vector2(horizontalSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
         }
 
-        public void TakeDamage(int hp)
+        public void TakeDamage(int hp, Vector2 direction)
         {
             playerHealth -= hp;
 
-            FindObjectOfType<GameController>().HitPopUp(hp, gameObject);
+            FindObjectOfType<GameController>().HitPopUp(hp, gameObject, direction);
 
             if (playerHealth <= 0)
             {

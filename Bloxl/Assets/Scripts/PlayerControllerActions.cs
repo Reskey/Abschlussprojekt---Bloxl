@@ -97,7 +97,10 @@ namespace Assets.Skripts
 
                 foreach (Collider2D enemy in hitEnemies.Where(x => !x.isTrigger))
                 {
-                    enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                    Vector2 direction = Vector2.right;
+                    if (gameObject.transform.localScale.x < 0) direction = Vector2.left;
+
+                    enemy.GetComponent<Enemy>().TakeDamage(attackDamage, direction);
                 }
             }
         }

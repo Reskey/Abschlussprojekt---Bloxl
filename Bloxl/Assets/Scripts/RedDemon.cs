@@ -88,8 +88,11 @@ public class RedDemon : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player") && canAttack)
         {
+            Vector2 direction = Vector2.right;
+            if (gameObject.transform.localScale.x < 0) direction = Vector2.left;
+
             var player = collision.collider.gameObject.GetComponent<PlayerController>();
-            player.TakeDamage(20);
+            player.TakeDamage(20, direction);
             StartCoroutine(AttackCooldown());
         }
     }
