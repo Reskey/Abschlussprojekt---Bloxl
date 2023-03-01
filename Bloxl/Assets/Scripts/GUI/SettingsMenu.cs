@@ -4,58 +4,62 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class SettingsMenu : MonoBehaviour
+namespace Assets.Skripts.Gui
 {
-    public AudioMixer audioMixer;
-
-    public TMPro.TMP_Dropdown resolutionDropdown;
-
-    Resolution[] resolutions;
-
-    private void Start()
+    public class SettingsMenu : MonoBehaviour
     {
-        resolutions = Screen.resolutions;
+        public AudioMixer audioMixer;
 
-        resolutionDropdown.ClearOptions();
+        public TMPro.TMP_Dropdown resolutionDropdown;
 
-        List<string> options = new List<string>();
+        Resolution[] resolutions;
 
-        int currentResolutionIndex = 0;
-        for (int i = 0; i < resolutions.Length; i++)
+        private void Start()
         {
-            string option = resolutions[i].width + "x" + resolutions[i].height;
-            options.Add(option);
+            resolutions = Screen.resolutions;
 
-            if (resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].height == Screen.currentResolution.height) 
+            resolutionDropdown.ClearOptions();
+
+            List<string> options = new List<string>();
+
+            int currentResolutionIndex = 0;
+            for (int i = 0; i < resolutions.Length; i++)
             {
-                currentResolutionIndex = i;
+                string option = resolutions[i].width + "x" + resolutions[i].height;
+                options.Add(option);
+
+                if (resolutions[i].width == Screen.currentResolution.width &&
+                    resolutions[i].height == Screen.currentResolution.height)
+                {
+                    currentResolutionIndex = i;
+                }
             }
+
+            resolutionDropdown.AddOptions(options);
+            resolutionDropdown.value = currentResolutionIndex;
+            resolutionDropdown.RefreshShownValue();
         }
 
-        resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex;
-        resolutionDropdown.RefreshShownValue();
+        public void SetResolution(int resolutionIndex)
+        {
+            Resolution resolution = resolutions[resolutionIndex];
+            Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        }
+
+        public void SetVolume(float volume)
+        {
+            audioMixer.SetFloat("volume", volume);
+        }
+
+        public void SetQuality(int qualityIndex)
+        {
+            QualitySettings.SetQualityLevel(qualityIndex);
+        }
+
+        public void SetFullscreen(bool isFullscreen)
+        {
+            Screen.fullScreen = isFullscreen;
+        }
     }
 
-    public void SetResolution(int resolutionIndex)
-    {
-        Resolution resolution = resolutions[resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
-    }
-
-    public void SetVolume(float volume)
-    {
-        audioMixer.SetFloat("volume", volume);
-    }
-
-    public void SetQuality(int qualityIndex)
-    {
-        QualitySettings.SetQualityLevel(qualityIndex);
-    }
-
-    public void SetFullscreen(bool isFullscreen)
-    {
-        Screen.fullScreen = isFullscreen;
-    }
 }

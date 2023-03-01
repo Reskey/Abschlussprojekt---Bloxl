@@ -5,32 +5,36 @@ using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+namespace Assets.Skripts.Player
 {
-    [SerializeField] Slider slider;
-    [SerializeField] Gradient gradient;
-    [SerializeField] Image fill;
-    [SerializeField] TMP_Text text;
-
-    public void SetMaxHealth(int health)
+    internal class HealthBar : MonoBehaviour
     {
-        slider.maxValue = health;
-        slider.value = health;
-        text.text = health.ToString();
+        [SerializeField] Slider slider;
+        [SerializeField] Gradient gradient;
+        [SerializeField] Image fill;
+        [SerializeField] TMP_Text text;
 
-        fill.color = gradient.Evaluate(1f);
+        public void SetMaxHealth(int health)
+        {
+            slider.maxValue = health;
+            slider.value = health;
+            text.text = health.ToString();
+
+            fill.color = gradient.Evaluate(slider.normalizedValue);
+        }
+
+        public void SetHealth(float health)
+        {
+            slider.value = health;
+            text.text = health.ToString();
+
+            fill.color = gradient.Evaluate(slider.normalizedValue);
+        }
+
+        public float GetHealth()
+        {
+            return slider.value;
+        }
     }
 
-    public void SetHealth(int health)
-    {
-        slider.value = health;
-        text.text = health.ToString();
-
-        fill.color = gradient.Evaluate(slider.normalizedValue);
-    }
-
-    public float GetHealth()
-    {
-        return slider.value;
-    }
 }

@@ -8,9 +8,9 @@ using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
 using System.Threading;
 using System.Collections;
-using UnityEngine.SceneManagement;
+using Assets.Scripts;
 
-namespace Assets.Skripts
+namespace Assets.Skripts.Player
 {
     public partial class PlayerController
     {
@@ -45,13 +45,19 @@ namespace Assets.Skripts
 
         private void Jump(CallbackContext context)
         {
-            if (isGrounded)
+            if (jumps > 0)
             {
-                isGrounded = false;
+                jumps--;
 
                 animator.SetBool(JumpingParameter, true);
 
+                Vector2 x = rigidBody.velocity;
+                x.y = 0;
+                rigidBody.velocity = x;
+
                 rigidBody.AddForce(jumpForce * Jump_Force);
+
+                isGrounded = false;
             }
         }
 
@@ -68,39 +74,28 @@ namespace Assets.Skripts
             rigidBody.gravityScale = 4;
         }
 
-
-
-
-        bool canAttack = true;
-
-        private IEnumerator AttackCooldown()
-        {
-            canAttack = false;
-
-            for (int i = 0; i < 16; i++)
-            {
-                yield return new WaitForFixedUpdate();
-            }
-
-            canAttack = true;
-        }
-
-        private void Attack(CallbackContext context)
+        private void AttackPerform(CallbackContext context)
         {
             if (canAttack)
             {
                 StartCoroutine(AttackCooldown());
 
-                animator.SetTrigger("Attack");
+                animator.SetTrigger(AttackParameter);
 
                 Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
-                foreach (Collider2D enemy in hitEnemies.Where(x => !x.isTrigger))
+                foreach (Collider2D hitTarget in hitEnemies.Where(x => !x.isTrigger))
                 {
-                    Vector2 direction = Vector2.right;
-                    if (gameObject.transform.localScale.x < 0) direction = Vector2.left;
+                    IDamageable enemy = hitTarget.GetComponent<IDamageable>();
 
-                    enemy.GetComponent<Enemy>().TakeDamage(attackDamage, direction);
+                    if (isGrounded)
+                    {
+                        enemy.TakeDamage(attackDamage);
+                    }
+                    else
+                    {
+                        enemy.TakeDamage(criticalDamage);
+                    }
                 }
             }
         }

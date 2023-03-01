@@ -5,42 +5,37 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Assets.Skripts.Management;
 using static UnityEngine.InputSystem.InputAction;
+using Assets.Scripts;
 
-
-namespace Assets.Skripts
+namespace Assets.Skripts.Player
 {
-    public partial class PlayerController : MonoBehaviour
+    public partial class PlayerController : MonoBehaviour, IDamageable
     {
         #region Attributes
         internal const string RunningParameter = "IsRunning";
         internal const string JumpingParameter = "IsJumping";
+        internal const string AttackParameter = "Attack";
         internal const RigidbodyConstraints2D dontMove = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         internal const RigidbodyConstraints2D move = RigidbodyConstraints2D.FreezeRotation;
 
         [Header("Variable Forces"), SerializeField, Range(0, 1000)] private int Jump_Force = 0;
         [SerializeField, Range(0, 1000)] private int Variable_Speed = 1;
 
-        [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
-        [SerializeField] private BoxCollider2D capsuleCollider2D;
-        [SerializeField, Range(0f, 5f)] private float groundCheckHeight = 0.2f;
-
-        [Space(10), Header("Combat"), SerializeField] private int playerMaxHealth;
-        private int playerHealth;
-        [SerializeField] private LayerMask enemyLayers;
+        [Space(10), Header("Combat"), SerializeField] private LayerMask enemyLayers;
         [SerializeField] private Transform attackPoint;
         [SerializeField, Range(0f, 5f)] private float attackRange = 0.5f;
         [SerializeField] private int attackDamage;
         [SerializeField] private int criticalDamage;
-        [SerializeField] private int maxHealth;
-
-        [Space(10), Header("Sounds"), SerializeField] private AudioSource jumpSound;
-        [SerializeField] private AudioSource runSound;
 
         private Inputs inputAction;
         private Animator animator;
         private Rigidbody2D rigidBody;
-        [SerializeField] private HealthBar healthBar;
+
+        [SerializeField] private GameObject healthBarObject;
+
+        private HealthBar healthBar;
 
         private Vector2 jumpForce = Vector2.up;
 
@@ -62,6 +57,9 @@ namespace Assets.Skripts
         }
 
         private volatile bool isGrounded = false;
+        private volatile bool canAttack = true;
+
+        private byte jumps = 2;
         #endregion
 
         #region Monobehaviour Methods    
@@ -80,21 +78,21 @@ namespace Assets.Skripts
             inputAction.PlayerBasics.Fastfall.started += FastFallStart;
             inputAction.PlayerBasics.Fastfall.canceled += FastFallEnd;
 
-            inputAction.PlayerBasics.Attack.performed += Attack;
+            inputAction.PlayerBasics.Attack.started += AttackPerform;
         }
 
         void Start()
         {
+            healthBar = healthBarObject.GetComponent<HealthBar>();
+
+            healthBar.SetMaxHealth(100);
+
             inputAction.PlayerBasics.Enable();
 
             rigidBody.sharedMaterial = new PhysicsMaterial2D("Verbuggter kekw")
             {
                 friction = 0
             };
-
-            healthBar.SetMaxHealth(100);
-
-            playerHealth = maxHealth;
         }
 
         void FixedUpdate()
@@ -103,13 +101,14 @@ namespace Assets.Skripts
             {
                 UpdateMovementMetrics();
             }
-
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision is TilemapCollider2D or CompositeCollider2D)
+            if (!collision.isTrigger)
             {
+                jumps = 2;
+
                 FastFallEnd(default);
 
                 animator.SetBool(JumpingParameter, false);
@@ -125,35 +124,49 @@ namespace Assets.Skripts
 
         void OnDrawGizmosSelected()
         {
-            Gizmos.DrawRay(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight));
-            Gizmos.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight));
-            Gizmos.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y + groundCheckHeight), Vector2.right * (capsuleCollider2D.size.x * 2));
-
             Gizmos.DrawWireSphere(attackPoint.transform.position, attackRange);
         }
 
         #endregion
 
         #region Internal Methods
+        public void Die()
+        {
+            GameController.SplitSprite(gameObject, 100, Vector2.up);
+
+            MonoBehaviour.Destroy(gameObject);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void TakeDamage(float damage)
+        {
+            var currentHealth = healthBar.GetHealth();
+
+            healthBar.SetHealth(currentHealth - damage);
+
+            if (currentHealth <= 0)
+            {
+                Die();
+            }
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void UpdateMovementMetrics()
         {
             rigidBody.velocity = new Vector2(horizontalSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
         }
+        #endregion
 
-        public void TakeDamage(int hp, Vector2 direction)
+        private IEnumerator AttackCooldown()
         {
-            playerHealth -= hp;
+            canAttack = false;
 
-            FindObjectOfType<GameController>().HitPopUp(hp, gameObject, direction);
-
-            if (playerHealth <= 0)
+            for (int i = 0; i < 32; i++)
             {
-                
+                yield return new WaitForFixedUpdate();
             }
 
-            healthBar.SetHealth(playerHealth);
+            canAttack = true;
         }
-        #endregion
     }
 }

@@ -4,19 +4,21 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - BrokenPiece
+  - Map
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Platforms
   - Piece
   - Particles
   - Enemies
-  - Player
+  - 
+  - 
+  - 
   - 
   - 
   - 

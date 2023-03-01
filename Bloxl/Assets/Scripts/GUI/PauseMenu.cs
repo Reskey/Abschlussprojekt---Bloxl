@@ -3,47 +3,51 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Skripts.Management;
 using static UnityEngine.InputSystem.InputAction;
 
-public class PauseMenu : MonoBehaviour
+namespace Assets.Skripts.Gui
 {
-    [SerializeField] private GameObject pauseMenu;
-
-    private Inputs inputController;
-
-    private bool isPaused = false;
-
-    private void Start()
+    public class PauseMenu : MonoBehaviour
     {
-        inputController = FindObjectOfType<GameController>().inputControlls;
+        [SerializeField] private GameObject pauseMenu;
 
-        inputController.PauseMenu.Enable();
+        private Inputs inputController;
 
-        inputController.PauseMenu.Pause.started += PauseAction;
-    }
+        private bool isPaused = false;
 
-    private void PauseAction(CallbackContext context)
-    {
-        isPaused = !isPaused;
-
-        pauseMenu.SetActive(isPaused);
-
-        if (isPaused)
+        private void Start()
         {
-            inputController.PlayerBasics.Disable();
+            inputController = FindObjectOfType<GameController>().inputControlls;
 
-            Time.timeScale = 0f;
+            inputController.PauseMenu.Enable();
+
+            inputController.PauseMenu.Pause.started += PauseAction;
         }
-        else
+
+        private void PauseAction(CallbackContext context)
         {
-            Time.timeScale = 1f;
+            isPaused = !isPaused;
 
-            inputController.PlayerBasics.Enable();
+            pauseMenu.SetActive(isPaused);
+
+            if (isPaused)
+            {
+                inputController.PlayerBasics.Disable();
+
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+
+                inputController.PlayerBasics.Enable();
+            }
         }
-    }
 
-    public void Resume() => PauseAction(default);
+        public void Resume() => PauseAction(default);
 
-    public void QuitGame() => Application.Quit();
+        public void QuitGame() => Application.Quit();
 
+    } 
 }
