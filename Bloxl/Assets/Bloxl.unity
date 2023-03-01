@@ -1139,7 +1139,7 @@ GameObject:
   - component: {fileID: 464292783}
   m_Layer: 6
   m_Name: Grid
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1250,7 +1250,7 @@ GameObject:
   - component: {fileID: 564532302}
   m_Layer: 0
   m_Name: Grid
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6007,7 +6007,7 @@ GameObject:
   - component: {fileID: 1045306784}
   m_Layer: 0
   m_Name: Grid
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6103,7 +6103,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8505279766880144490, guid: ed29789946bc0014d9685863b22d7f91, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed29789946bc0014d9685863b22d7f91, type: 3}
@@ -47096,6 +47096,10 @@ PrefabInstance:
     - target: {fileID: 1770913824810911713, guid: 196d66442c1f0074ea94a65a23abafb6, type: 3}
       propertyPath: m_Name
       value: Imp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1770913824810911713, guid: 196d66442c1f0074ea94a65a23abafb6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4050769938390706326, guid: 196d66442c1f0074ea94a65a23abafb6, type: 3}
       propertyPath: m_RootOrder

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6634044197730048272}
   - component: {fileID: 6634044197730048278}
   - component: {fileID: 6854785136994232508}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RedDemon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

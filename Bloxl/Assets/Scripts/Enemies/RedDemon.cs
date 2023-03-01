@@ -144,6 +144,8 @@ namespace Assets.Skripts.Enemies
 
         public void Die()
         {
+            GameController.SplitSprite(gameObject, 100, GameController.PlayerDirection);
+
             Destroy(gameObject);
         }
 

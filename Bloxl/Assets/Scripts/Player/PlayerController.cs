@@ -126,6 +126,8 @@ namespace Assets.Skripts.Player
         #region Internal Methods
         public void Die()
         {
+            GameController.SplitSprite(gameObject, 100, Vector2.up);
+
             MonoBehaviour.Destroy(gameObject);
         }
 
