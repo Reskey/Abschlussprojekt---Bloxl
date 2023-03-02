@@ -13,6 +13,8 @@ namespace Assets.Skripts
     public partial class PlayerController : MonoBehaviour
     {
         #region Attributes
+        public Canvas winScreen;
+        private bool doubleJumpAvailable = false;
         internal const string RunningParameter = "IsRunning";
         internal const string JumpingParameter = "IsJumping";
         internal const RigidbodyConstraints2D dontMove = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
@@ -141,6 +143,22 @@ namespace Assets.Skripts
             Vector3 newScale = transform.localScale;
             newScale.x *= -1;
             transform.localScale = newScale;
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.tag == "Victory")
+            {
+                StartCoroutine(TriggerVictoryScreen());
+
+            }
+        }
+
+        private IEnumerator TriggerVictoryScreen() 
+        { 
+            yield return new WaitForSeconds(1.5f);
+            winScreen.gameObject.SetActive(true);
+            Time.timeScale = 0;
         }
         #endregion
     }

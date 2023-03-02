@@ -50,7 +50,19 @@ namespace Assets.Skripts
                 animator.SetBool(JumpingParameter, true);
 
                 rigidBody.AddForce(jumpForce * (Jump_Force * 5));
+
+                doubleJumpAvailable = true;
             }
+            else if (doubleJumpAvailable)
+            {
+
+                animator.SetBool(JumpingParameter, true);
+
+                rigidBody.AddForce(jumpForce * (Jump_Force * 5));
+
+                doubleJumpAvailable = false;
+            }
+            
         }
 
         private void FastFallStart(CallbackContext context)
