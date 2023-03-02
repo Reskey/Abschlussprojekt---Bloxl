@@ -126,6 +126,12 @@ namespace Assets.Skripts.Player
 
                 isGrounded = true;
             }
+
+            if (collision.tag == "Victory")
+            {
+                StartCoroutine(TriggerVictoryScreen());
+
+            }
         }
 
         void OnDrawGizmosSelected()
@@ -179,15 +185,6 @@ namespace Assets.Skripts.Player
             Vector3 newScale = transform.localScale;
             newScale.x *= -1;
             transform.localScale = newScale;
-        }
-
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            if (collision.tag == "Victory")
-            {
-                StartCoroutine(TriggerVictoryScreen());
-
-            }
         }
 
         private IEnumerator TriggerVictoryScreen() 
