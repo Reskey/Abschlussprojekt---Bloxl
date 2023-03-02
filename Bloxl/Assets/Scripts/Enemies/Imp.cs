@@ -1,4 +1,4 @@
-using Assets.Scripts.Enemies;
+using Assets.Skripts.Enemies;
 using Assets.Skripts.Management;
 using System.Collections;
 using System.Collections.Generic;

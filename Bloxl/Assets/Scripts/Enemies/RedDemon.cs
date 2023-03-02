@@ -1,7 +1,6 @@
 using Assets.Skripts.Management;
 using Assets.Skripts.Player;
-using Assets.Scripts;
-using System;
+using Assets.Skripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +10,7 @@ namespace Assets.Skripts.Enemies
 {
     public class RedDemon : MonoBehaviour, IDamageable
     {
+        
         private const string AttackParameter = "IsAttacking";
         private const float normalSpeed = .07f;
         private const float aggroSpeed = .15f;
@@ -94,7 +94,7 @@ namespace Assets.Skripts.Enemies
         {
             if (collision.collider.CompareTag("Player") && canAttack)
             {
-                collision.collider.GetComponent<PlayerController>().TakeDamage(20);
+                collision.collider.GetComponent<IDamageable>().TakeDamage(20);
 
                 StartCoroutine(AttackCooldown());
             }
@@ -104,6 +104,8 @@ namespace Assets.Skripts.Enemies
         {
             if (collision.CompareTag("Player") && !stalkTarget)
             {
+                canAttack = true;
+
                 targetRef = collision.gameObject;
 
                 stalkTarget = true;
@@ -116,7 +118,7 @@ namespace Assets.Skripts.Enemies
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.CompareTag("Player") && stalkTarget)
+            if (!collision.isTrigger && collision.CompareTag("Player") && stalkTarget)
             {
                 stalkTarget = false;
 
@@ -136,7 +138,11 @@ namespace Assets.Skripts.Enemies
         {
             health -= amount;
 
-            if (health < 0)
+            gameObject.GetComponent<Rigidbody2D>().AddForce(GameController.PlayerDirection * 400f + Vector2.up * 100f);
+
+            FindObjectOfType<GameController>().HitPopUp(amount, gameObject, GameController.PlayerDirection);
+
+            if (health <= 0)
             {
                 Die();
             }
@@ -145,6 +151,15 @@ namespace Assets.Skripts.Enemies
         public void Die()
         {
             GameController.SplitSprite(gameObject, 100, GameController.PlayerDirection);
+
+            int rndNum = Random.Range(1, 5);
+
+            if (rndNum == 3)
+            {
+                GameObject item = GameController.HealItem;
+
+                MonoBehaviour.Instantiate(item, transform.position, Quaternion.identity);
+            }
 
             Destroy(gameObject);
         }

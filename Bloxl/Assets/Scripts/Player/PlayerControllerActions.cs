@@ -8,7 +8,8 @@ using static UnityEngine.InputSystem.InputAction;
 using UnityEngine;
 using System.Threading;
 using System.Collections;
-using Assets.Scripts;
+using Assets.Skripts;
+using Assets.Skripts.Management;
 
 namespace Assets.Skripts.Player
 {

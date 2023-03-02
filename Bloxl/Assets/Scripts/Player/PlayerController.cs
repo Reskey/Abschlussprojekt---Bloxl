@@ -7,7 +7,9 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Assets.Skripts.Management;
 using static UnityEngine.InputSystem.InputAction;
-using Assets.Scripts;
+using Assets.Skripts;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.InputSystem.XInput;
 
 namespace Assets.Skripts.Player
 {
@@ -28,6 +30,8 @@ namespace Assets.Skripts.Player
         [SerializeField, Range(0f, 5f)] private float attackRange = 0.5f;
         [SerializeField] private int attackDamage;
         [SerializeField] private int criticalDamage;
+
+        [SerializeField] private Light2D lightSource; 
 
         private Inputs inputAction;
         private Animator animator;
@@ -132,9 +136,18 @@ namespace Assets.Skripts.Player
         #region Internal Methods
         public void Die()
         {
-            GameController.SplitSprite(gameObject, 100, Vector2.up);
+            //GameController.SplitSprite(gameObject, 100, Vector2.zero);
 
-            MonoBehaviour.Destroy(gameObject);
+            //lightSource.transform.parent = null;
+            inputAction.PlayerBasics.Disable();
+
+            animator.SetTrigger("Die");
+
+            gameObject.tag = "Untagged";
+            healthBarObject.active = false;
+
+
+            //MonoBehaviour.Destroy(gameObject);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -142,9 +155,11 @@ namespace Assets.Skripts.Player
         {
             var currentHealth = healthBar.GetHealth();
 
+            FindObjectOfType<GameController>().HitPopUp(damage, gameObject, Vector2.zero);
+
             healthBar.SetHealth(currentHealth - damage);
 
-            if (currentHealth <= 0)
+            if (healthBar.GetHealth() <= 0)
             {
                 Die();
             }

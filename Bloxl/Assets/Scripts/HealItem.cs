@@ -1,27 +1,35 @@
 using Assets.Skripts;
+using Assets.Skripts.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealItem : MonoBehaviour
+namespace Assets.Skripts
 {
-    private void OnCollisionEnter2D(Collision2D collision)
+    public class HealItem : MonoBehaviour
     {
-        GameObject target = collision.gameObject;
-
-        if (target.tag == "Player")
+        private void FixedUpdate()
         {
-            if (FindObjectOfType<HealthBar>().GetHealth() < 100)
-            {
-
-                target.GetComponent<PlayerController>().TakeDamage(-20, Vector2.down);
-
-                Destroy(gameObject);
-            } 
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Healitem"), FindObjectOfType<HealthBar>().GetHealth() == 100);
         }
-        if (target.layer == 9)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
-            Physics2D.IgnoreCollision(collision.collider, collision.otherCollider);
+            GameObject target = collision.gameObject;
+
+            if (target.tag == "Player")
+            {
+                if (FindObjectOfType<HealthBar>().GetHealth() < 100)
+                {
+
+                    target.GetComponent<IDamageable>().TakeDamage(-20);
+
+                    Destroy(gameObject);
+                }
+            }
+            if (target.layer == 9)
+            {
+                Physics2D.IgnoreCollision(collision.collider, collision.otherCollider);
+            }
         }
     }
 }

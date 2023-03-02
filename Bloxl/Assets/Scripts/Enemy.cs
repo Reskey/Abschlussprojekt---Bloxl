@@ -1,3 +1,4 @@
+using Assets.Skripts.Management;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,7 +34,7 @@ public class Enemy : MonoBehaviour
 
     void Die(Vector2 direction)
     {
-        FindObjectOfType<GameController>().BreakObjectIntoPieces(gameObject, 100, 5.8f, 0, 6, direction);
+        GameController.SplitSprite(gameObject, 100, direction);
 
         int rndNum = Random.Range(1, 5);
 

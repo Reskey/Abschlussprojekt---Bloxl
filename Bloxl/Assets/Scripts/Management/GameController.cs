@@ -15,6 +15,9 @@ namespace Assets.Skripts.Management
         [Header("Hitpopup"), Space(10), SerializeField] GameObject hitpopup;
         [SerializeField] Vector3 offset;
 
+        public static GameObject HealItem;
+        [SerializeField] private GameObject healItem;
+
         [HideInInspector] public Inputs inputControlls;
 
         private static GameController instance;
@@ -32,6 +35,8 @@ namespace Assets.Skripts.Management
 
             instance = GetComponent<GameController>();
 
+            HealItem = instance.healItem;
+
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Piece"));
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemies"), LayerMask.NameToLayer("Piece"));
         }
@@ -45,49 +50,49 @@ namespace Assets.Skripts.Management
         }
 
         internal void HitPopUp(float dmg, GameObject obj, Vector2 direction)
-    {
-        GameObject hitpopupPrefab = hitpopup;
-
-        GameObject c = MonoBehaviour.Instantiate(hitpopupPrefab, obj.transform.position, Quaternion.identity);
-
-        TMP_Text text = c.GetComponentInChildren<TMP_Text>();
-        text.text = "-" + dmg.ToString();
-
-        if (obj.tag == "Player")
         {
-            if (dmg < 0)
+            GameObject hitpopupPrefab = hitpopup;
+
+            GameObject c = MonoBehaviour.Instantiate(hitpopupPrefab, obj.transform.position, Quaternion.identity);
+
+            TMP_Text text = c.GetComponentInChildren<TMP_Text>();
+            text.text = "-" + dmg.ToString();
+
+            if (obj.tag == "Player")
             {
-                text.color = Color.green;
-                text.text = "+" + Mathf.Abs(dmg).ToString();
+                if (dmg < 0)
+                {
+                    text.color = Color.green;
+                    text.text = "+" + Mathf.Abs(dmg).ToString();
+                }
+                else
+                {
+                    text.color = Color.red;
+                    text.text = "-" + dmg.ToString();
+                }
             }
-            else
-            {
-                text.color = Color.red;
-                text.text = "-" + dmg.ToString();
-            }
+
+            StartCoroutine(HitpopupPosUpdater(text, obj, direction));
+
+            MonoBehaviour.Destroy(c, 1);
         }
 
-        StartCoroutine(HitpopupPosUpdater(text, obj, direction));
-
-        MonoBehaviour.Destroy(c, 1);
-    }
-
-    private IEnumerator HitpopupPosUpdater(TMP_Text textRef, GameObject targetObj, Vector2 direction)
-    {
-        Vector3 randomPos = Random.insideUnitSphere / 1.2f;
-
-        Vector3 directionalOffset = new Vector3(offset.x * direction.x, offset.y, offset.z);
-
-        while (textRef && targetObj) 
+        private IEnumerator HitpopupPosUpdater(TMP_Text textRef, GameObject targetObj, Vector2 direction)
         {
-            Vector3 pos = targetObj.transform.position;
+            Vector3 randomPos = Random.insideUnitSphere / 1.2f;
 
-            textRef.transform.position = Camera.main.WorldToScreenPoint(pos + directionalOffset + randomPos);
+            Vector3 directionalOffset = new Vector3(offset.x * direction.x, offset.y, offset.z);
 
-            yield return new WaitForFixedUpdate();
+            while (textRef && targetObj)
+            {
+                Vector3 pos = targetObj.transform.position;
+
+                textRef.transform.position = Camera.main.WorldToScreenPoint(pos + directionalOffset + randomPos);
+
+                yield return new WaitForFixedUpdate();
+            }
+            Destroy(textRef);
         }
-        Destroy(textRef);
-    }
 
         public static void SplitSprite(GameObject obj, int numPieces, Vector2 direction)
         {
