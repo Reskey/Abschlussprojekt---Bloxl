@@ -56,7 +56,7 @@ namespace Assets.Skripts.Player
                 x.y = 0;
                 rigidBody.velocity = x;
 
-                rigidBody.AddForce(jumpForce * Jump_Force);
+                rigidBody.AddForce(jumpForce * Jump_Force * 1.1f);
 
                 isGrounded = false;
             }

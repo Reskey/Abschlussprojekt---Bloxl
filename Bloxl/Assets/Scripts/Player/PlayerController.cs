@@ -179,14 +179,6 @@ namespace Assets.Skripts.Player
             rigidBody.velocity = new Vector2(horizontalSpeed * Time.fixedDeltaTime, rigidBody.velocity.y);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void FlipSprite()
-        {
-            Vector3 newScale = transform.localScale;
-            newScale.x *= -1;
-            transform.localScale = newScale;
-        }
-
         private IEnumerator TriggerVictoryScreen() 
         { 
             yield return new WaitForSeconds(1.5f);
