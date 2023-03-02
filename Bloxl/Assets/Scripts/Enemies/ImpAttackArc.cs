@@ -12,8 +12,12 @@ namespace Assets.Skripts.Enemies
 
         private Vector3 targetPos = Vector3.zero;
 
+        private Rigidbody2D rb;
+
         private void Start()
         {
+            rb = gameObject.GetComponent<Rigidbody2D>();
+
             targetPos = target.transform.position;
 
             targetPos.x += Random.Range(-1.3f, 1.3f);
@@ -23,16 +27,17 @@ namespace Assets.Skripts.Enemies
             float angle = Vector3.SignedAngle(targetPos, transform.position, Vector3.forward);
 
             transform.Rotate(Vector3.forward, angle);
-        }
 
-        private void FixedUpdate()
-        {
-            transform.position = Vector2.MoveTowards(transform.position, targetPos, .15f);
+            rb.AddForce((targetPos - transform.position) * 70f);
+
+            //targetPos = Physics2D.Raycast(transform.position, targetPos, float.PositiveInfinity, LayerMask.NameToLayer("Platforms")).point;
+
+            //transform.position.Scale(targetPos);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Player"))
+            if (collision.CompareTag("Player") || collision.CompareTag("Map"))
             {
                 collision.GetComponent<IDamageable>().TakeDamage(5);
 

@@ -1,3 +1,4 @@
+using Assets.Skripts;
 using Assets.Skripts.Enemies;
 using Assets.Skripts.Management;
 using System.Collections;
@@ -6,10 +7,12 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Imp : MonoBehaviour
+public class Imp : MonoBehaviour, IDamageable
 {
     #region Attributes
     [SerializeField] GameObject attackPrefab;
+
+    private float health = 50;
 
     private const string RunningParameter = "IsRunning";
     private const float speed = .02f;
@@ -132,6 +135,26 @@ public class Imp : MonoBehaviour
 
         return rootArea + new Vector2(xOffset, yOffset);
     }
+
+    public void TakeDamage(float amount)
+    {
+        health -= amount;
+
+        FindObjectOfType<GameController>().HitPopUp(amount, gameObject, GameController.PlayerDirection);
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        GameController.SplitSprite(gameObject, 50, GameController.PlayerDirection);
+
+        Destroy(gameObject);
+    }
+
     #endregion
 
     #region Coroutines
@@ -178,7 +201,7 @@ public class Imp : MonoBehaviour
     {
         yield return idleWait;
 
-        for (int i = 0; i < 25; i++)
+        for (int i = 0; i < 10; i++)
         {
             if (outOfRange)
             {

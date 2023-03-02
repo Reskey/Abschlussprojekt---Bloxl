@@ -7816,7 +7816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3c6cc5b548346a43a20d1198b1f935d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 0}
+  pauseMenu: {fileID: 1552248319}
 --- !u!4 &1377894619 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4171353578367416100, guid: 16916241f819ce248beeb3e32dc4f006, type: 3}
@@ -47422,6 +47422,10 @@ PrefabInstance:
       value: Imp
       objectReference: {fileID: 0}
     - target: {fileID: 1770913824810911713, guid: 196d66442c1f0074ea94a65a23abafb6, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1770913824810911713, guid: 196d66442c1f0074ea94a65a23abafb6, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -53106,7 +53110,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7110348072110474450, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: Jump_Force
-      value: 598
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 7110348072110474450, guid: 16ef489b219511e4190e2080a8529161, type: 3}
       propertyPath: attackPoint

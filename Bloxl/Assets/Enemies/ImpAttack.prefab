@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4727347935522474284}
   - component: {fileID: 2728668689969438921}
+  - component: {fileID: 6152707493010065757}
   m_Layer: 0
   m_Name: ImpAttack
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 3388449426212806168}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1941829736975182986}
@@ -58,12 +59,33 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.04498458, y: -0.0009069443}
-      - {x: -0.47871846, y: 0.16281708}
-      - {x: -0.35161614, y: -0.19047904}
-      - {x: -0.0070455372, y: -0.35399207}
-      - {x: 0.39660096, y: -0.17923284}
+    - - {x: -0.008159533, y: -0.048253432}
+      - {x: -0.47871846, y: 0.20490286}
+      - {x: -0.4594609, y: -0.066852085}
+      - {x: -0.0070455372, y: -0.31979737}
+      - {x: 0.45446888, y: -0.05823627}
       - {x: 0.47871852, y: 0.17406337}
+--- !u!50 &6152707493010065757
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3388449426212806168}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &9222923625789246472
 GameObject:
   m_ObjectHideFlags: 0

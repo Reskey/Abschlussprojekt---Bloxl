@@ -66,7 +66,7 @@ namespace Assets.Skripts.Player
         {
             if (!isGrounded)
             {
-                rigidBody.gravityScale = 8;
+                rigidBody.gravityScale = 12;
             }
         }
 
@@ -88,15 +88,8 @@ namespace Assets.Skripts.Player
                 foreach (Collider2D hitTarget in hitEnemies.Where(x => !x.isTrigger))
                 {
                     IDamageable enemy = hitTarget.GetComponent<IDamageable>();
-
-                    if (isGrounded)
-                    {
-                        enemy.TakeDamage(attackDamage);
-                    }
-                    else
-                    {
-                        enemy.TakeDamage(criticalDamage);
-                    }
+                   
+                    enemy.TakeDamage(attackDamage);                   
                 }
             }
         }
