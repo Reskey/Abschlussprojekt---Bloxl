@@ -18,6 +18,7 @@ namespace Assets.Skripts.Player
     {
         #region Attributes
         public Canvas winScreen;
+        public Canvas deathScreen;
         private bool doubleJumpAvailable = false;
         internal const string RunningParameter = "IsRunning";
         internal const string JumpingParameter = "IsJumping";
@@ -157,7 +158,7 @@ namespace Assets.Skripts.Player
             gameObject.tag = "Untagged";
             healthBarObject.active = false;
 
-            TriggerDeathScreen();
+            StartCoroutine(TriggerDeathScreen());
 
             //MonoBehaviour.Destroy(gameObject);
 
@@ -196,7 +197,7 @@ namespace Assets.Skripts.Player
         private IEnumerator TriggerDeathScreen()
         {
             yield return new WaitForSeconds(1.5f);
-            winScreen.gameObject.SetActive(true);
+            deathScreen.gameObject.SetActive(true);
             Time.timeScale = 0;
         }
 
