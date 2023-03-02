@@ -149,9 +149,16 @@ namespace Assets.Skripts
         {
             if (collision.tag == "Victory")
             {
-                winScreen.gameObject.SetActive(true);
-                Time.timeScale = 0;
+                StartCoroutine(TriggerVictoryScreen());
+
             }
+        }
+
+        private IEnumerator TriggerVictoryScreen() 
+        { 
+            yield return new WaitForSeconds(1.5f);
+            winScreen.gameObject.SetActive(true);
+            Time.timeScale = 0;
         }
         #endregion
     }
