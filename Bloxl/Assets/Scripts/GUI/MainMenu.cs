@@ -1,3 +1,4 @@
+using Assets.Skripts.Management;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,12 @@ namespace Assets.Skripts.Gui
             Debug.Log("quit");
             // Funktioniert nur im fertigen Build, nicht im Unity Editor
             Application.Quit();
+        }
+
+        public void BackToMenu()
+        {
+            FindObjectOfType<GameController>().inputControlls.Disable();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
     } 
 }

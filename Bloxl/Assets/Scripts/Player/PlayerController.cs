@@ -10,6 +10,7 @@ using static UnityEngine.InputSystem.InputAction;
 using Assets.Skripts;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.InputSystem.XInput;
+using Unity.VisualScripting;
 
 namespace Assets.Skripts.Player
 {
@@ -99,6 +100,8 @@ namespace Assets.Skripts.Player
             {
                 friction = 0
             };
+
+            Time.timeScale= 1;
         }
 
         void FixedUpdate()
@@ -154,8 +157,12 @@ namespace Assets.Skripts.Player
             gameObject.tag = "Untagged";
             healthBarObject.active = false;
 
+            TriggerDeathScreen();
 
             //MonoBehaviour.Destroy(gameObject);
+
+
+
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -185,6 +192,14 @@ namespace Assets.Skripts.Player
             winScreen.gameObject.SetActive(true);
             Time.timeScale = 0;
         }
+
+        private IEnumerator TriggerDeathScreen()
+        {
+            yield return new WaitForSeconds(1.5f);
+            winScreen.gameObject.SetActive(true);
+            Time.timeScale = 0;
+        }
+
         #endregion
 
         private IEnumerator AttackCooldown()

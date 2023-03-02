@@ -16,7 +16,7 @@ namespace Assets.Skripts.Enemies
         private const float aggroSpeed = .15f;
         private const float patrolDistance = 8f;
 
-        private float health = 300;
+        private float health = 120;
 
         private Animator animator;
         private Rigidbody2D rigidbody;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -26,7 +27,10 @@ namespace Assets.Skripts.Gui
             for (int i = 0; i < resolutions.Length; i++)
             {
                 string option = resolutions[i].width + "x" + resolutions[i].height;
+                if (!options.Contains(option))
+                {
                 options.Add(option);
+                }
 
                 if (resolutions[i].width == Screen.currentResolution.width &&
                     resolutions[i].height == Screen.currentResolution.height)

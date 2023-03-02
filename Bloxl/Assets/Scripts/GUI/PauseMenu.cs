@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.Skripts.Management;
 using static UnityEngine.InputSystem.InputAction;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Skripts.Gui
 {
@@ -18,11 +19,16 @@ namespace Assets.Skripts.Gui
 
         private void Start()
         {
-            inputController = FindObjectOfType<GameController>().inputControlls;
+            print(FindObjectOfType<GameController>()as object ??"null");
 
-            inputController.PauseMenu.Enable();
+            if (inputController is null)
+            {
+                inputController = FindObjectOfType<GameController>().inputControlls;
 
-            inputController.PauseMenu.Pause.started += PauseAction;
+                inputController.PauseMenu.Enable();
+
+                inputController.PauseMenu.Pause.started += PauseAction; 
+            }
         }
 
         private void PauseAction(CallbackContext context)
@@ -47,7 +53,11 @@ namespace Assets.Skripts.Gui
 
         public void Resume() => PauseAction(default);
 
-        public void QuitGame() => Application.Quit();
+        public void QuitGame() 
+        {
+            FindObjectOfType<GameController>().inputControlls.Disable();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        }
 
     } 
 }
