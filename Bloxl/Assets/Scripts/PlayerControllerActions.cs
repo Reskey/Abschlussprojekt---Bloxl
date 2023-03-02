@@ -65,5 +65,17 @@ namespace Assets.Skripts
         {
             rigidBody.gravityScale = 4;
         }
+
+        private void Attack(CallbackContext context)
+        {
+            animator.SetTrigger("Attack");
+
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+
+            foreach (Collider2D enemy in hitEnemies)
+            {
+                Debug.Log("HIT:" + enemy.name);
+            }
+        }
     }
 }

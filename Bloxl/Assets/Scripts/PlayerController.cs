@@ -24,6 +24,9 @@ namespace Assets.Skripts
         [Space(10), Header("Neccesary Objects"), SerializeField] private Transform groundCheck;
         [SerializeField] private BoxCollider2D capsuleCollider2D;
         [SerializeField, Range(0f, 5f)] private float groundCheckHeight = 0.2f;
+        [SerializeField] private LayerMask enemyLayers;
+        [SerializeField] private Transform attackPoint;
+        [SerializeField] private float attackRange = 0.5f;
 
 
         [Space(10), Header("Sounds"), SerializeField] private AudioSource jumpSound;
@@ -73,6 +76,8 @@ namespace Assets.Skripts
 
             inputAction.PlayerBasics.Fastfall.started += FastFallStart;
             inputAction.PlayerBasics.Fastfall.canceled += FastFallEnd;
+
+            inputAction.PlayerBasics.Attack.performed += Attack;
         }
 
         void Start()
@@ -91,10 +96,9 @@ namespace Assets.Skripts
             {
                 UpdateMovementMetrics();
             }
-            Color rayColor = Color.red;
+
             if (isGrounded)
             {
-                rayColor = Color.green;
                 FastFallEnd(default);
 
                 animator.SetBool(JumpingParameter, false);
@@ -104,12 +108,15 @@ namespace Assets.Skripts
                     rigidBody.constraints = dontMove;
                 }
             }
-            if (groundCheckVisuals)
-            {
-                Debug.DrawRay(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight), rayColor);
-                Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight), rayColor);
-                Debug.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y + groundCheckHeight), Vector2.right * (capsuleCollider2D.size.x * 2), rayColor);
-            }
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawRay(capsuleCollider2D.bounds.center + new Vector3(capsuleCollider2D.bounds.extents.x, -capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight));
+            Gizmos.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y), Vector2.down * (groundCheckHeight));
+            Gizmos.DrawRay(capsuleCollider2D.bounds.center - new Vector3(capsuleCollider2D.bounds.extents.x, capsuleCollider2D.size.y + groundCheckHeight), Vector2.right * (capsuleCollider2D.size.x * 2));
+
+            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
         }
 
         /*private void OnTriggerEnter2D(Collider2D collision)
