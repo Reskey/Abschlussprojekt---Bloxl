@@ -56,20 +56,10 @@ namespace Assets.Skripts.Player
                 x.y = 0;
                 rigidBody.velocity = x;
 
-                rigidBody.AddForce(jumpForce * Jump_Force * 1.1f);
+                rigidBody.AddForce(jumpForce * Jump_Force);
 
                 isGrounded = false;
             }
-            else if (doubleJumpAvailable)
-            {
-
-                animator.SetBool(JumpingParameter, true);
-
-                rigidBody.AddForce(jumpForce * (Jump_Force * 5));
-
-                doubleJumpAvailable = false;
-            }
-            
         }
 
         private void FastFallStart(CallbackContext context)
